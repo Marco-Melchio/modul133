@@ -64,8 +64,14 @@ function renderTeamShowcase(team) {
 
       return `
         <div class="col-12 col-md-6 col-xl-4">
-          <div class="showcase-card text-center p-4 h-100" tabindex="0">
-            <img src="${pokemon.sprite}" alt="${pokemon.name}" />
+          <div class="team-slot h-100">
+            <div class="showcase-card text-center p-4" tabindex="0">
+              <img src="${pokemon.sprite}" alt="${pokemon.name}" />
+              <p class="text-uppercase fw-bold mt-3 mb-1">${pokemon.name}</p>
+              <p class="text-muted mb-2">${pokemon.types.join(', ')}</p>
+              <div class="small">Fähigkeiten: ${pokemon.abilities.join(', ')}.</div>
+              ${statsOverlay}
+            </div>
             <button
               class="btn btn-sm showcase-remove-btn"
               type="button"
@@ -74,10 +80,6 @@ function renderTeamShowcase(team) {
             >
               Entfernen
             </button>
-            <p class="text-uppercase fw-bold mt-3 mb-1">${pokemon.name}</p>
-            <p class="text-muted mb-2">${pokemon.types.join(', ')}</p>
-            <div class="small">Fähigkeiten: ${pokemon.abilities.join(', ')}.</div>
-            ${statsOverlay}
           </div>
         </div>`;
     })

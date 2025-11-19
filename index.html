@@ -45,33 +45,51 @@
           <div class="card border-0 shadow h-100">
             <div class="card-body">
               <h2 class="h4 mb-3">Pokémon suchen</h2>
-              <form id="search-form" class="row g-2">
-                <div class="col-12 col-md-8 position-relative">
-                  <label class="form-label visually-hidden" for="pokemon-input"
-                    >Pokémon Name</label
-                  >
-                  <input
-                    id="pokemon-input"
-                    class="form-control form-control-lg"
-                    type="text"
-                    placeholder="z.B. pikachu"
-                    autocomplete="off"
-                    required
-                  />
-                  <div
-                    id="pokemon-suggestions"
-                    class="suggestions list-group shadow"
-                    role="listbox"
-                    aria-label="Vorschläge für Pokémon Namen"
-                  ></div>
+              <form id="search-form" class="row g-4 align-items-stretch">
+                <div class="col-12 col-lg-7">
+                  <div class="search-panel h-100">
+                    <label class="form-label visually-hidden" for="pokemon-input"
+                      >Pokémon Name</label
+                    >
+                    <input
+                      id="pokemon-input"
+                      class="form-control form-control-lg"
+                      type="text"
+                      placeholder="z.B. pikachu"
+                      autocomplete="off"
+                      required
+                    />
+                    <div
+                      id="pokemon-suggestions"
+                      class="suggestions list-group shadow"
+                      role="listbox"
+                      aria-label="Vorschläge für Pokémon Namen"
+                    ></div>
+                    <div class="d-grid search-panel__actions">
+                      <button
+                        type="submit"
+                        class="btn btn-lg btn-warning text-dark action-button"
+                      >
+                        Laden
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div class="col-12 col-md-4 d-grid">
-                  <button
-                    type="submit"
-                    class="btn btn-lg btn-warning text-dark action-button"
-                  >
-                    Laden
-                  </button>
+                <div class="col-12 col-lg-5">
+                  <div class="user-panel h-100">
+                    <div class="user-panel__header">
+                      <p class="user-panel__eyebrow">User Bereich</p>
+                      <h3 class="h5 mb-0">Anmelden oder registrieren</h3>
+                    </div>
+                    <div class="user-panel__actions">
+                      <button type="button" class="btn auth-button auth-button--ghost">
+                        Login
+                      </button>
+                      <button type="button" class="btn auth-button auth-button--primary">
+                        Register
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </form>
             </div>
