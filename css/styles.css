@@ -158,6 +158,36 @@ header .lead {
   min-height: 140px;
   border: 1px solid rgba(255, 255, 255, 0.35);
   box-shadow: inset 0 0 0 1px rgba(255, 221, 87, 0.25);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.relation-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 15% 20%, rgba(255, 221, 87, 0.35), transparent 55%),
+    radial-gradient(circle at 80% 30%, rgba(59, 130, 246, 0.25), transparent 60%);
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 0;
+}
+
+.relation-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 35px rgba(15, 23, 42, 0.15);
+}
+
+.relation-card:hover::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.relation-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .relation-list {
@@ -178,6 +208,18 @@ header .lead {
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 0.5px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease,
+    color 0.2s ease, border-color 0.2s ease;
+  cursor: default;
+}
+
+.type-badge:hover,
+.type-badge:focus-visible {
+  background-image: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(255, 221, 87, 0.5));
+  border-color: transparent;
+  color: var(--pokemon-midnight);
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.15);
 }
 
 .showcase-card {
@@ -210,7 +252,8 @@ header .lead {
   color: var(--pokemon-red-dark);
   font-weight: 600;
   transition: background-color 0.2s ease, transform 0.2s ease;
-  z-index: 2;
+  z-index: 30;
+  box-shadow: 0 8px 20px rgba(255, 53, 94, 0.35);
 }
 
 .showcase-remove-btn:hover,
@@ -239,6 +282,7 @@ header .lead {
   transform: translateY(12px);
   transition: opacity 0.25s ease, transform 0.25s ease;
   pointer-events: none;
+  z-index: 1;
 }
 
 .showcase-card:hover .showcase-stats,
@@ -290,10 +334,11 @@ header .lead {
   max-height: 280px;
   overflow-y: auto;
   display: none;
-  z-index: 5;
+  z-index: 30;
   border-radius: 1rem;
   border: 1px solid rgba(15, 23, 42, 0.08);
   backdrop-filter: blur(12px);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.25);
 }
 
 .suggestions.suggestions--visible {
