@@ -75,17 +75,36 @@ function renderTeamList(team) {
 
 function renderTeamShowcase(team) {
   const showcaseItems = team
-    .map(
-      (pokemon) => `
+    .map((pokemon) => {
+      const statsList = (pokemon.stats || [])
+        .map(
+          (stat) => `
+            <li>
+              <span>${stat.name}</span>
+              <span>${stat.value}</span>
+            </li>`
+        )
+        .join('');
+
+      const statsOverlay = statsList
+        ? `
+            <div class="showcase-stats" aria-hidden="true">
+              <p class="showcase-stats__title mb-2">Stats</p>
+              <ul class="showcase-stats__list">${statsList}</ul>
+            </div>`
+        : '';
+
+      return `
         <div class="col-12 col-md-6 col-xl-4">
-          <div class="showcase-card text-center p-4 h-100">
+          <div class="showcase-card text-center p-4 h-100" tabindex="0">
             <img src="${pokemon.sprite}" alt="${pokemon.name}" />
             <p class="text-uppercase fw-bold mt-3 mb-1">${pokemon.name}</p>
             <p class="text-muted mb-2">${pokemon.types.join(', ')}</p>
-            <div class="small">Fähigkeiten: ${pokemon.abilities.join(', ')}</div>
+            <div class="small">Fähigkeiten: ${pokemon.abilities.join(', ')}.</div>
+            ${statsOverlay}
           </div>
-        </div>`
-    )
+        </div>`;
+    })
     .join('');
 
   const placeholderCount = Math.max(TEAM_LIMIT - team.length, 0);
