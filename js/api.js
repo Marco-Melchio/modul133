@@ -77,6 +77,9 @@ function fetchTcgCards(term) {
     url: TCG_ENDPOINT,
     method: 'GET',
     dataType: 'json',
+    headers: {
+      'X-Api-Key': TCG_API_KEY
+    },
     data: {
       q: `name:${term}`,
       pageSize: 3
