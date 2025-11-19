@@ -83,3 +83,24 @@ function fetchTcgCards(term) {
     }
   }).then((response) => response.data || []);
 }
+
+let pokemonListPromise = null;
+
+function fetchAllPokemonNames() {
+  if (pokemonListPromise) {
+    return pokemonListPromise;
+  }
+
+  pokemonListPromise = $.ajax({
+    url: POKEMON_LIST_ENDPOINT,
+    method: 'GET',
+    dataType: 'json'
+  })
+    .then((response) => (response.results || []).map((pokemon) => pokemon.name))
+    .catch((error) => {
+      pokemonListPromise = null;
+      throw error;
+    });
+
+  return pokemonListPromise;
+}
