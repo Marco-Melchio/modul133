@@ -93,15 +93,19 @@ header .lead {
   color: inherit;
 }
 
+.action-button {
+  border-radius: 999px !important;
+  padding: 0.85rem 1.5rem;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+}
+
 .btn-warning {
   background-image: linear-gradient(135deg, var(--pokemon-yellow), #ffb347);
   border: none;
   color: #3b1d00;
   font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
   box-shadow: 0 12px 25px rgba(255, 221, 87, 0.45);
-  border-radius: 999px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -162,10 +166,6 @@ header .lead {
   filter: drop-shadow(0 6px 12px rgba(15, 23, 42, 0.3));
 }
 
-#status-message {
-  min-height: 2.5rem;
-}
-
 .tcg-card img {
   max-width: 100%;
   border-radius: 1rem;
@@ -207,6 +207,8 @@ header .lead {
   border-radius: 1.75rem;
   border: 1px solid rgba(255, 255, 255, 0.35);
   min-height: 320px;
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -219,6 +221,53 @@ header .lead {
 .showcase-card:hover {
   transform: translateY(-6px) scale(1.01);
   box-shadow: 0 35px 75px rgba(10, 26, 42, 0.3);
+}
+
+.showcase-stats {
+  position: absolute;
+  inset: 1rem;
+  background: rgba(10, 26, 42, 0.92);
+  border-radius: 1.25rem;
+  color: var(--pokemon-white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 1.25rem;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+
+.showcase-card:hover .showcase-stats,
+.showcase-card:focus-within .showcase-stats {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.showcase-stats__title {
+  font-size: 0.85rem;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.showcase-stats__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.showcase-stats__list li {
+  display: flex;
+  justify-content: space-between;
+  text-transform: capitalize;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 .showcase-card img {
@@ -310,10 +359,39 @@ main {
   padding-bottom: 5rem;
 }
 
-#status-message {
-  min-height: 2.5rem;
+.status-message {
+  display: none;
+  min-height: 3rem;
   font-weight: 600;
-  color: var(--pokemon-red);
+  border-radius: 1.25rem;
+  padding: 0.85rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 15px 40px rgba(15, 23, 42, 0.1);
+}
+
+.status-message--success {
+  color: #0f9d58;
+  background: rgba(15, 157, 88, 0.08);
+  border-color: rgba(15, 157, 88, 0.35);
+}
+
+.status-message--danger {
+  color: #d93025;
+  background: rgba(217, 48, 37, 0.08);
+  border-color: rgba(217, 48, 37, 0.35);
+}
+
+.status-message--warning {
+  color: #b45309;
+  background: rgba(251, 191, 36, 0.12);
+  border-color: rgba(251, 191, 36, 0.45);
+}
+
+.status-message--info {
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.1);
+  border-color: rgba(37, 99, 235, 0.35);
 }
 
 .team-slot img,

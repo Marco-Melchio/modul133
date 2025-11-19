@@ -1,8 +1,7 @@
 function setStatus(message, type) {
   $('#status-message')
     .hide()
-    .removeClass()
-    .addClass(`alert alert-${type}`)
+    .attr('class', `status-message status-message--${type}`)
     .text(message)
     .fadeIn(200);
 }
