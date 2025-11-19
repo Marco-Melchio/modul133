@@ -19,8 +19,8 @@
     />
     <link rel="stylesheet" href="css/styles.css" />
   </head>
-  <body class="bg-dark text-white">
-    <header class="bg-primary py-4 mb-4 shadow">
+  <body class="pokemon-theme">
+    <header class="py-4 mb-4 shadow">
       <div class="container">
         <h1 class="display-5 fw-bold text-center text-uppercase">
           Pokémon Team Builder
@@ -35,7 +35,7 @@
       <section class="row g-4">
         <div class="col-12 col-lg-6">
           <div class="card border-0 shadow h-100">
-            <div class="card-body bg-secondary text-white">
+            <div class="card-body">
               <h2 class="h4 mb-3">Pokémon suchen</h2>
               <form id="search-form" class="row g-2">
                 <div class="col-12 col-md-8 position-relative">
@@ -69,9 +69,9 @@
         </div>
         <div class="col-12 col-lg-6">
           <div class="card border-0 shadow h-100">
-            <div class="card-body bg-secondary text-white">
+            <div class="card-body">
               <h2 class="h4 mb-3">Mein Team</h2>
-              <p class="small text-light">
+              <p class="small text-muted">
                 Speichere bis zu sechs Pokémon. Das Team wird automatisch im
                 Browser gespeichert.
               </p>
@@ -84,7 +84,7 @@
       <section class="row g-4 mt-1">
         <div class="col-12">
           <div class="card border-0 shadow">
-            <div class="card-body bg-secondary text-white">
+            <div class="card-body">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2 class="h4 mb-0">Pokémon Details</h2>
                 <button id="add-to-team" class="btn btn-success" disabled>
@@ -100,7 +100,7 @@
       <section class="row g-4 mt-1">
         <div class="col-12 col-lg-6">
           <div class="card border-0 shadow h-100">
-            <div class="card-body bg-secondary text-white">
+            <div class="card-body">
               <h2 class="h4 mb-3">Stärken &amp; Schwächen</h2>
               <div id="type-relations" class="row gy-3">
                 <div class="col-12 text-muted">Noch keine Daten geladen.</div>
@@ -110,7 +110,7 @@
         </div>
         <div class="col-12 col-lg-6">
           <div class="card border-0 shadow h-100">
-            <div class="card-body bg-secondary text-white">
+            <div class="card-body">
               <h2 class="h4 mb-3">TCG Karten</h2>
               <div id="tcg-cards" class="row g-3"></div>
             </div>
@@ -121,9 +121,9 @@
       <section class="row g-4 mt-1">
         <div class="col-12">
           <div class="card border-0 shadow">
-            <div class="card-body bg-secondary text-white">
+            <div class="card-body">
               <h2 class="h4 mb-3 text-center text-uppercase">Team Showcase</h2>
-              <p class="text-center text-light small mb-4">
+              <p class="text-center text-muted small mb-4">
                 Dein komplettes Team in gross, maximal sechs Pokémon.
               </p>
               <div id="team-showcase" class="row g-3 justify-content-center"></div>
