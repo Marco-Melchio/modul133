@@ -231,7 +231,7 @@ header .lead {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 0.75rem;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -239,12 +239,12 @@ header .lead {
 }
 
 .showcase-remove-btn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
+  position: relative;
+  align-self: center;
+  margin-top: 0.5rem;
   border-radius: 999px;
-  padding: 0.25rem 0.85rem;
-  font-size: 0.75rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.8rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   background-color: rgba(255, 53, 94, 0.15);
@@ -252,7 +252,7 @@ header .lead {
   color: var(--pokemon-red-dark);
   font-weight: 600;
   transition: background-color 0.2s ease, transform 0.2s ease;
-  z-index: 30;
+  z-index: 2;
   box-shadow: 0 8px 20px rgba(255, 53, 94, 0.35);
 }
 
@@ -269,7 +269,10 @@ header .lead {
 
 .showcase-stats {
   position: absolute;
-  inset: 1rem;
+  top: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
   background: rgba(10, 26, 42, 0.92);
   border-radius: 1.25rem;
   color: var(--pokemon-white);
@@ -334,7 +337,7 @@ header .lead {
   max-height: 280px;
   overflow-y: auto;
   display: none;
-  z-index: 30;
+  z-index: 1050;
   border-radius: 1rem;
   border: 1px solid rgba(15, 23, 42, 0.08);
   backdrop-filter: blur(12px);
