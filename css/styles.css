@@ -144,28 +144,6 @@ header .lead {
   background: linear-gradient(90deg, rgba(255, 53, 94, 0.85), rgba(59, 130, 246, 0.85));
 }
 
-.list-group-item {
-  background: rgba(255, 255, 255, 0.85);
-  color: #0f172a;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 1rem;
-  margin-bottom: 0.75rem;
-  padding: 0.75rem 1rem;
-}
-
-.team-slot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
-.team-slot img {
-  width: 56px;
-  height: 56px;
-  filter: drop-shadow(0 6px 12px rgba(15, 23, 42, 0.3));
-}
-
 .tcg-card img {
   max-width: 100%;
   border-radius: 1rem;
@@ -216,6 +194,29 @@ header .lead {
   gap: 0.75rem;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   box-shadow: 0 25px 65px rgba(10, 26, 42, 0.2);
+}
+
+.showcase-remove-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  border-radius: 999px;
+  padding: 0.25rem 0.85rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background-color: rgba(255, 53, 94, 0.15);
+  border: 1px solid rgba(255, 53, 94, 0.35);
+  color: var(--pokemon-red-dark);
+  font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  z-index: 2;
+}
+
+.showcase-remove-btn:hover,
+.showcase-remove-btn:focus-visible {
+  background-color: rgba(255, 53, 94, 0.3);
+  transform: translateY(-1px);
 }
 
 .showcase-card:hover {

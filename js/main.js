@@ -26,7 +26,7 @@ $(document).ready(function () {
     }
   });
 
-  $('#team-list').on('click', '.remove-btn', function () {
+  $('#team-showcase').on('click', '.showcase-remove-btn', function () {
     const index = Number($(this).data('index'));
     removePokemonFromTeam(index);
   });

@@ -38,44 +38,12 @@ function removePokemonFromTeam(index) {
 }
 
 function renderTeam(team) {
-  renderTeamList(team);
   renderTeamShowcase(team);
-}
-
-function renderTeamList(team) {
-  if (!team.length) {
-    $('#team-list').html(
-      '<li class="list-group-item">Noch keine Pokémon gespeichert.</li>'
-    );
-    return;
-  }
-
-  const listItems = team
-    .map(
-      (pokemon, index) => `
-        <li class="list-group-item">
-          <div class="team-slot">
-            <div class="d-flex align-items-center gap-3">
-              <img src="${pokemon.sprite}" alt="${pokemon.name}" />
-              <div>
-                <p class="mb-0 text-capitalize fw-bold">${pokemon.name}</p>
-                <small>${pokemon.types.join(', ')}</small>
-              </div>
-            </div>
-            <button class="btn btn-sm btn-outline-light remove-btn" data-index="${index}">
-              Entfernen
-            </button>
-          </div>
-        </li>`
-    )
-    .join('');
-
-  $('#team-list').html(listItems);
 }
 
 function renderTeamShowcase(team) {
   const showcaseItems = team
-    .map((pokemon) => {
+    .map((pokemon, index) => {
       const statsList = (pokemon.stats || [])
         .map(
           (stat) => `
@@ -97,6 +65,14 @@ function renderTeamShowcase(team) {
       return `
         <div class="col-12 col-md-6 col-xl-4">
           <div class="showcase-card text-center p-4 h-100" tabindex="0">
+            <button
+              class="btn btn-sm showcase-remove-btn"
+              type="button"
+              data-index="${index}"
+              aria-label="${pokemon.name} aus dem Team entfernen"
+            >
+              Entfernen
+            </button>
             <img src="${pokemon.sprite}" alt="${pokemon.name}" />
             <p class="text-uppercase fw-bold mt-3 mb-1">${pokemon.name}</p>
             <p class="text-muted mb-2">${pokemon.types.join(', ')}</p>
