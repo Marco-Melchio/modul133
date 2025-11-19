@@ -42,3 +42,48 @@ body {
   border-radius: 0.5rem;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.35);
 }
+
+.relation-card {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  min-height: 120px;
+}
+
+.relation-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.type-badge {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+
+.showcase-card {
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 250px;
+}
+
+.showcase-card img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+}
+
+.showcase-card--empty {
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+}
