@@ -73,6 +73,8 @@ function addToSet(set, relations = []) {
 }
 
 function fetchTcgCards(term) {
+  const query = buildTcgQuery(term);
+
   return $.ajax({
     url: TCG_ENDPOINT,
     method: 'GET',
@@ -81,10 +83,25 @@ function fetchTcgCards(term) {
       'X-Api-Key': TCG_API_KEY
     },
     data: {
-      q: `name:${term}`,
+      q: query,
       pageSize: 3
     }
   }).then((response) => response.data || []);
+}
+
+function buildTcgQuery(term) {
+  const normalized = (term || '')
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/[\\"']/g, '')
+    .replace(/\s+/g, ' ');
+
+  if (!normalized) {
+    return 'name:*';
+  }
+
+  return `name:"${normalized}"`;
 }
 
 let pokemonListPromise = null;
