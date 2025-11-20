@@ -3,7 +3,15 @@ function fetchPokemon(pokemonName) {
     url: `${POKE_API_BASE}${pokemonName}`,
     method: 'GET',
     dataType: 'json'
-  }).then(simplifyPokemon);
+  })
+    .then((data) => {
+      console.log(`[API] PokeAPI response received for ${pokemonName}`, data);
+      return simplifyPokemon(data);
+    })
+    .catch((error) => {
+      console.error(`[API] Failed to fetch Pokémon ${pokemonName}`, error);
+      throw error;
+    });
 }
 
 function simplifyPokemon(data) {
@@ -25,6 +33,7 @@ function fetchTypeRelations(types) {
     return Promise.resolve(createEmptyRelations());
   }
 
+  console.log(`[API] Loading type relations for: ${uniqueTypes.join(', ')}`);
   const requests = uniqueTypes.map((typeName) =>
     $.ajax({
       url: `${POKE_TYPE_ENDPOINT}${typeName}`,
@@ -33,7 +42,16 @@ function fetchTypeRelations(types) {
     })
   );
 
-  return Promise.all(requests).then((responses) => aggregateRelations(responses));
+  return Promise.all(requests)
+    .then((responses) => {
+      const relations = aggregateRelations(responses);
+      console.log('[API] Type relations loaded', relations);
+      return relations;
+    })
+    .catch((error) => {
+      console.error('[API] Failed to load type relations', error);
+      throw error;
+    });
 }
 
 function createEmptyRelations() {
@@ -73,8 +91,10 @@ function addToSet(set, relations = []) {
 }
 
 function fetchTcgCards(term) {
-  const query = buildTcgQuery(term);
-  console.log(query)
+  const normalizedTerm = normalizeTcgTerm(term);
+  const query = buildTcgQuery(normalizedTerm);
+  console.log(`[API] Requesting TCG cards with query: ${query}`);
+
   return $.ajax({
     url: TCG_ENDPOINT,
     method: 'GET',
@@ -87,22 +107,67 @@ function fetchTcgCards(term) {
       q: query,
       pageSize: 3
     }
-  }).then((response) => response.data || []);
+  })
+    .then((response) => {
+      const cards = response.data || [];
+      console.log(`[API] Primary TCG response for "${normalizedTerm}" returned ${cards.length} cards.`);
+
+      if (cards.length || !normalizedTerm) {
+        return cards;
+      }
+
+      const fallbackQuery = buildWildcardTcgQuery(normalizedTerm);
+      console.log(`[API] No cards found. Retrying with fallback query: ${fallbackQuery}`);
+
+      return $.ajax({
+        url: TCG_ENDPOINT,
+        method: 'GET',
+        dataType: 'json',
+        timeout: 100000,
+        headers: {
+          'X-Api-Key': TCG_API_KEY
+        },
+        data: {
+          q: fallbackQuery,
+          pageSize: 3
+        }
+      }).then((fallbackResponse) => {
+        const fallbackCards = fallbackResponse.data || [];
+        console.log(
+          `[API] Fallback TCG response for "${normalizedTerm}" returned ${fallbackCards.length} cards.`
+        );
+        return fallbackCards;
+      });
+    })
+    .catch((error) => {
+      console.error(`[API] Failed to load TCG cards for "${normalizedTerm}"`, error);
+      throw error;
+    });
 }
 
-function buildTcgQuery(term) {
-  const normalized = (term || '')
+function normalizeTcgTerm(term) {
+  return (term || '')
     .toString()
     .trim()
     .toLowerCase()
     .replace(/[\\"']/g, '')
     .replace(/\s+/g, ' ');
+}
 
-  if (!normalized) {
+function buildTcgQuery(normalizedTerm) {
+  if (!normalizedTerm) {
     return 'name:*';
   }
 
-  return `name:"${normalized}"`;
+  return `name:"${normalizedTerm}"`;
+}
+
+function buildWildcardTcgQuery(normalizedTerm) {
+  if (!normalizedTerm) {
+    return 'name:*';
+  }
+
+  return `name:*${normalizedTerm}*`;
 }
 
 let pokemonListPromise = null;
@@ -117,9 +182,14 @@ function fetchAllPokemonNames() {
     method: 'GET',
     dataType: 'json'
   })
-    .then((response) => (response.results || []).map((pokemon) => pokemon.name))
+    .then((response) => {
+      const names = (response.results || []).map((pokemon) => pokemon.name);
+      console.log(`[API] Loaded ${names.length} Pokémon names for suggestions.`);
+      return names;
+    })
     .catch((error) => {
       pokemonListPromise = null;
+      console.error('[API] Failed to preload Pokémon names', error);
       throw error;
     });
 
