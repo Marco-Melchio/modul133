@@ -100,7 +100,9 @@ function fetchTcgCards(term) {
     method: 'GET',
     dataType: 'json',
     timeout: 30000,
-    data: normalizedTerm ? { name: normalizedTerm } : {}
+    // Der aktuelle API-Stand verlangt eine Query-Syntax wie "name:<value>".
+    // Die bisherige Abfrage per "?name=" wird vom Gateway mit 403 geblockt.
+    data: normalizedTerm ? { q: `name:${normalizedTerm}` } : {}
   })
     .then((response) => {
       const normalizedCards = normalizeTcgResponse(response, normalizedTerm).slice(0, 3);
