@@ -29,8 +29,8 @@ function renderPokemonDetails(pokemon) {
                   <span class="text-capitalize">${stat.name}</span>
                   <span>${stat.value}</span>
                 </div>
-                <div class="progress" role="progressbar" aria-valuenow="${stat.value}" aria-valuemin="0" aria-valuemax="200">
-                  <div class="progress-bar bg-warning" style="width: ${Math.min(stat.value, 200)}%"></div>
+                <div class="progress stat-progress" role="progressbar" aria-valuenow="${stat.value}" aria-valuemin="0" aria-valuemax="200">
+                  <div class="progress-bar stat-bar" style="width: ${Math.min(stat.value, 200)}%"></div>
                 </div>
               </div>
             `
@@ -48,42 +48,36 @@ function clearPokemonDetails() {
 }
 
 function showTypeRelationsLoading() {
-  $('#type-relations').html(
-    '<div class="type-relations-placeholder text-muted">Stärken und Schwächen werden geladen...</div>'
-  );
+  const loading =
+    '<div class="type-relations-placeholder text-muted">Stärken und Schwächen werden geladen...</div>';
+
+  $('#strength-relations').html(loading);
+  $('#weakness-relations').html(loading);
 }
 
 function renderTypeRelations(relations) {
-  const content = `
-    <div class="relations-grid">
-      ${renderRelationPanel('Stärken', relations.strengths, 'Keine offensichtlichen Stärken.')}
-      ${renderRelationPanel('Schwächen', relations.weaknesses, 'Keine direkten Schwächen.')}
-    </div>
-  `;
-
-  $('#type-relations').html(content);
+  $('#strength-relations').html(
+    renderRelationContent(relations.strengths, 'Keine offensichtlichen Stärken.')
+  );
+  $('#weakness-relations').html(renderRelationContent(relations.weaknesses, 'Keine direkten Schwächen.'));
 }
 
-function renderRelationPanel(title, values, emptyMessage) {
+function renderRelationContent(values, emptyMessage) {
   if (!values.length) {
-    return `
-      <div class="relations-panel" aria-live="polite">
-        <p class="relations-panel__title">${title}</p>
-        <p class="relations-panel__empty">${emptyMessage}</p>
-      </div>`;
+    return `<p class="relations-panel__empty">${emptyMessage}</p>`;
   }
 
   return `
-    <div class="relations-panel">
-      <p class="relations-panel__title">${title}</p>
-      <ul class="relations-list">
-        ${values.map((value) => `<li class="type-badge text-capitalize">${value}</li>`).join('')}
-      </ul>
-    </div>`;
+    <ul class="relations-list">
+      ${values.map((value) => `<li class="type-badge text-capitalize">${value}</li>`).join('')}
+    </ul>`;
 }
 
 function clearTypeRelations() {
-  $('#type-relations').html(
+  $('#strength-relations').html(
+    '<div class="type-relations-placeholder text-muted">Keine Daten verfügbar.</div>'
+  );
+  $('#weakness-relations').html(
     '<div class="type-relations-placeholder text-muted">Keine Daten verfügbar.</div>'
   );
 }
@@ -101,9 +95,9 @@ function renderTcgCards(cards) {
   const html = cards
     .map(
       (card) => `
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-sm-6 col-lg-3 col-xl-2">
           <div class="tcg-card text-center">
-            <img src="${card.images.small}" alt="${card.name}" />
+            <img class="tcg-card__image" src="${card.images.small}" alt="${card.name}" />
             <p class="tcg-card-title text-capitalize mb-0">${card.name}</p>
             <small class="text-muted">${card.set?.name || 'TCGdex'}</small>
           </div>
@@ -123,9 +117,11 @@ function renderTcgCardsError() {
 }
 
 function renderTypeRelationsError() {
-  $('#type-relations').html(
-    '<div class="type-relations-placeholder text-warning">Beziehungen konnten nicht geladen werden.</div>'
-  );
+  const errorMessage =
+    '<div class="type-relations-placeholder text-warning">Beziehungen konnten nicht geladen werden.</div>';
+
+  $('#strength-relations').html(errorMessage);
+  $('#weakness-relations').html(errorMessage);
 }
 
 function animateSection(selector) {

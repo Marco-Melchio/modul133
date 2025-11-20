@@ -170,18 +170,8 @@ header .lead {
 .user-panel {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
   height: 100%;
-  padding: 1.5rem;
-  border-radius: 1.5rem;
-  border: 1px solid rgba(79, 70, 229, 0.35);
-  box-shadow: var(--shadow-inset), var(--shadow-soft);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.user-panel:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-inset), var(--shadow-soft-hover);
 }
 
 .user-panel__header {
@@ -296,73 +286,46 @@ header .lead {
 }
 
 .stat-bar {
-  height: 8px;
+  height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(255, 53, 94, 0.85), rgba(59, 130, 246, 0.85));
+  background: linear-gradient(90deg, #fbbf24, #f97316, #ef4444, #8b5cf6);
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.35);
+}
+
+.stat-progress {
+  height: 14px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(15, 23, 42, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.06);
 }
 
 .tcg-card {
   height: 100%;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 1.5rem;
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  padding: 1.25rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  box-shadow: var(--shadow-soft);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  gap: 0.6rem;
+  padding: 0.25rem;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .tcg-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-soft-hover);
 }
 
-.tcg-card img {
+.tcg-card__image {
   max-width: 100%;
   border-radius: 1rem;
-  border: 2px solid rgba(59, 130, 246, 0.35);
-  box-shadow: var(--shadow-soft-hover);
+  box-shadow: 0 8px 18px rgba(10, 26, 42, 0.25);
 }
 
 .type-relations-placeholder {
   text-align: center;
   font-weight: 600;
   padding: 1rem 0;
-}
-
-.relations-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-}
-
-.relations-panel {
-  background: rgba(255, 255, 255, 0.92);
-  border-radius: 1.5rem;
-  padding: 1.75rem;
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.04), var(--shadow-soft);
-  min-height: 220px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.relations-panel:hover {
-  transform: translateY(-4px);
-  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.04), var(--shadow-soft-hover);
-}
-
-.relations-panel__title {
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.2rem;
-  font-weight: 700;
-  color: var(--pokemon-midnight);
 }
 
 .relations-panel__empty {
