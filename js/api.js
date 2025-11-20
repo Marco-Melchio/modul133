@@ -92,52 +92,21 @@ function addToSet(set, relations = []) {
 
 function fetchTcgCards(term) {
   const normalizedTerm = normalizeTcgTerm(term);
-  const query = buildTcgQuery(normalizedTerm);
-  console.log(`[API] Requesting TCG cards with query: ${query}`);
+  console.log(`[API] Requesting TCGdex cards for term: ${normalizedTerm || 'alle'}`);
 
   return $.ajax({
     url: TCG_ENDPOINT,
     method: 'GET',
     dataType: 'json',
-    timeout: 100000,
-    headers: {
-      'X-Api-Key': TCG_API_KEY
-    },
-    data: {
-      q: query,
-      pageSize: 3
-    }
+    timeout: 30000,
+    data: normalizedTerm ? { name: normalizedTerm } : {}
   })
     .then((response) => {
-      const cards = response.data || [];
-      console.log(`[API] Primary TCG response for "${normalizedTerm}" returned ${cards.length} cards.`);
-
-      if (cards.length || !normalizedTerm) {
-        return cards;
-      }
-
-      const fallbackQuery = buildWildcardTcgQuery(normalizedTerm);
-      console.log(`[API] No cards found. Retrying with fallback query: ${fallbackQuery}`);
-
-      return $.ajax({
-        url: TCG_ENDPOINT,
-        method: 'GET',
-        dataType: 'json',
-        timeout: 100000,
-        headers: {
-          'X-Api-Key': TCG_API_KEY
-        },
-        data: {
-          q: fallbackQuery,
-          pageSize: 3
-        }
-      }).then((fallbackResponse) => {
-        const fallbackCards = fallbackResponse.data || [];
-        console.log(
-          `[API] Fallback TCG response for "${normalizedTerm}" returned ${fallbackCards.length} cards.`
-        );
-        return fallbackCards;
-      });
+      const normalizedCards = normalizeTcgResponse(response, normalizedTerm).slice(0, 3);
+      console.log(
+        `[API] TCGdex response for "${normalizedTerm || 'alle'}" returned ${normalizedCards.length} cards.`
+      );
+      return normalizedCards;
     })
     .catch((error) => {
       console.error(`[API] Failed to load TCG cards for "${normalizedTerm}"`, error);
@@ -154,20 +123,39 @@ function normalizeTcgTerm(term) {
     .replace(/\s+/g, ' ');
 }
 
-function buildTcgQuery(normalizedTerm) {
-  if (!normalizedTerm) {
-    return 'name:*';
+function normalizeTcgResponse(response, normalizedTerm) {
+  const cards = Array.isArray(response) ? response : response?.data || response?.results || [];
+
+  if (!Array.isArray(cards)) {
+    return [];
   }
 
-  return `name:"${normalizedTerm}"`;
+  const filteredCards = normalizedTerm
+    ? cards.filter((card) => card?.name?.toLowerCase().includes(normalizedTerm))
+    : cards;
+
+  return filteredCards.map(transformTcgCard).filter(Boolean);
 }
 
-function buildWildcardTcgQuery(normalizedTerm) {
-  if (!normalizedTerm) {
-    return 'name:*';
+function transformTcgCard(card) {
+  if (!card) {
+    return null;
   }
 
-  return `name:*${normalizedTerm}*`;
+  const imageUrl =
+    card.images?.small || card.image?.small || card.image || card.highRes?.small || card.images?.large;
+
+  const setName =
+    (typeof card.set === 'string' && card.set) ||
+    card.set?.name ||
+    card.expansion?.name ||
+    card.series?.name;
+
+  return {
+    name: card.name,
+    images: { small: imageUrl },
+    set: setName ? { name: setName } : null
+  };
 }
 
 let pokemonListPromise = null;
