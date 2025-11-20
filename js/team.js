@@ -20,13 +20,13 @@ function addPokemonToTeam(pokemon) {
   if (team.length >= TEAM_LIMIT) {
     setStatus('Team ist bereits voll.', 'warning');
     console.warn('[Team] Cannot add Pokémon, team is full.');
-    return;
+    return false;
   }
 
   if (team.some((member) => member.id === pokemon.id)) {
     setStatus('Dieses Pokémon ist schon im Team.', 'warning');
     console.warn('[Team] Pokémon already in team, skipping.');
-    return;
+    return false;
   }
 
   const updatedTeam = [...team, pokemon];
@@ -34,6 +34,7 @@ function addPokemonToTeam(pokemon) {
   renderTeam(updatedTeam);
   setStatus(`${pokemon.name} wurde zum Team hinzugefügt.`, 'success');
   console.log(`[Team] Added ${pokemon.name} to the team.`);
+  return true;
 }
 
 function removePokemonFromTeam(index) {
@@ -81,7 +82,7 @@ function renderTeamShowcase(team) {
               ${statsOverlay}
             </div>
             <button
-              class="btn btn-sm showcase-remove-btn"
+              class="btn btn-sm showcase-remove-btn btn-animated"
               type="button"
               data-index="${index}"
               aria-label="${pokemon.name} aus dem Team entfernen"

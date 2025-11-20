@@ -26,7 +26,10 @@ $(document).ready(function () {
   $('#add-to-team').on('click', function () {
     console.log('[Team] Add to team clicked.');
     if (currentPokemon) {
-      addPokemonToTeam(currentPokemon);
+      const added = addPokemonToTeam(currentPokemon);
+      if (added) {
+        resetCurrentPokemonView();
+      }
     }
   });
 
@@ -155,4 +158,12 @@ function renderSuggestions(term) {
 
 function hideSuggestions() {
   $('#pokemon-suggestions').removeClass('suggestions--visible').empty();
+}
+
+function resetCurrentPokemonView() {
+  currentPokemon = null;
+  clearPokemonDetails();
+  clearTypeRelations();
+  clearTcgCards();
+  disableTeamButton();
 }

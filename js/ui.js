@@ -92,10 +92,12 @@ function renderTcgCards(cards) {
     return;
   }
 
-  const html = cards
+  const visibleCards = cards.slice(0, 4);
+
+  const html = visibleCards
     .map(
       (card) => `
-        <div class="col-12 col-sm-6 col-lg-3 col-xl-2">
+        <div class="col-12 col-md-6 col-xl-3">
           <div class="tcg-card text-center">
             <img class="tcg-card__image" src="${card.images.small}" alt="${card.name}" />
             <p class="tcg-card-title text-capitalize mb-0">${card.name}</p>
