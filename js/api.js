@@ -110,8 +110,6 @@ function fetchTcgCards(term) {
 
   if (!normalizedTerm) return $.Deferred().resolve([]).promise();
 
-  // Wichtig: TCGdex nutzt KEIN q= für Suche
-  // Korrekt ist name=like:<query>
   return $.ajax({
     url: TCG_ENDPOINT,
     method: 'GET',
@@ -121,7 +119,7 @@ function fetchTcgCards(term) {
     }
   })
     .then((response) => {
-      const normalizedCards = normalizeTcgResponse(response, normalizedTerm).slice(0, 3);
+      const normalizedCards = normalizeTcgResponse(response, normalizedTerm).slice(0, 4);
 
       console.log(
         `[API] TCGdex response for "${normalizedTerm}" returned ${normalizedCards.length} cards.`,
