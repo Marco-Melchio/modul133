@@ -94,6 +94,7 @@ function fetchTcgCards(term) {
   const normalizedTerm = normalizeTcgTerm(term);
   console.log(`[API] Requesting TCGdex cards for term: ${normalizedTerm || 'alle'}`);
 
+  // TCGdex stellt die Kartendaten ohne API Key zur Verfügung.
   return $.ajax({
     url: TCG_ENDPOINT,
     method: 'GET',

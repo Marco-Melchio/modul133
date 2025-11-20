@@ -105,7 +105,7 @@ function renderTcgCards(cards) {
           <div class="tcg-card text-center">
             <img src="${card.images.small}" alt="${card.name}" />
             <p class="tcg-card-title text-capitalize mb-0">${card.name}</p>
-            <small class="text-muted">${card.set?.name || 'Pokémon TCG'}</small>
+            <small class="text-muted">${card.set?.name || 'TCGdex'}</small>
           </div>
         </div>`
     )
