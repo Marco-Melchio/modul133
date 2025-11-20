@@ -236,10 +236,10 @@ header .lead {
 }
 
 .btn-warning {
-  background-image: linear-gradient(135deg, var(--pokemon-yellow), #ffb347);
+  background-image: linear-gradient(135deg, #ff8e72, #ff4747);
   border: none;
-  color: var(--pokemon-white);
-  font-weight: 700;
+  color: white;
+  font-weight: 600;
   box-shadow: var(--button-shadow);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -250,7 +250,7 @@ header .lead {
 }
 
 #pokemon-input {
-  height: 56px;
+  height: 50px;
   background-color: rgba(255, 255, 255, 0.7);
   border: 1px solid rgba(15, 23, 42, 0.12);
   border-radius: 1rem;
