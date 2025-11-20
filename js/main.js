@@ -4,6 +4,7 @@ const SUGGESTION_THRESHOLD = 3;
 const SUGGESTION_LIMIT = 6;
 
 $(document).ready(function () {
+  console.log('[App] Initializing Pokémon Team Builder.');
   loadTeamFromStorage();
   preloadPokemonNames();
 
@@ -13,7 +14,9 @@ $(document).ready(function () {
   $('#search-form').on('submit', function (event) {
     event.preventDefault();
     const pokemonName = $pokemonInput.val().trim().toLowerCase();
+    console.log(`[Search] Form submitted with value: "${pokemonName}"`);
     if (!pokemonName) {
+      console.warn('[Search] No Pokémon name provided, aborting search.');
       return;
     }
     hideSuggestions();
@@ -21,6 +24,7 @@ $(document).ready(function () {
   });
 
   $('#add-to-team').on('click', function () {
+    console.log('[Team] Add to team clicked.');
     if (currentPokemon) {
       addPokemonToTeam(currentPokemon);
     }
@@ -28,6 +32,7 @@ $(document).ready(function () {
 
   $('#team-showcase').on('click', '.showcase-remove-btn', function () {
     const index = Number($(this).data('index'));
+    console.log(`[Team] Remove button clicked for index ${index}.`);
     removePokemonFromTeam(index);
   });
 
@@ -54,6 +59,7 @@ $(document).ready(function () {
 });
 
 function searchPokemon(pokemonName) {
+  console.log(`[Search] Starting lookup for ${pokemonName}.`);
   setStatus('Lade Daten...', 'info');
   disableTeamButton();
   showTypeRelationsLoading();
@@ -62,6 +68,7 @@ function searchPokemon(pokemonName) {
   fetchPokemon(pokemonName)
     .then((pokemon) => {
       currentPokemon = pokemon;
+      console.log('[Search] Pokémon data loaded', pokemon);
       renderPokemonDetails(pokemon);
       $('#add-to-team').prop('disabled', false);
       setStatus(`${pokemon.name} wurde geladen.`, 'success');
@@ -69,17 +76,31 @@ function searchPokemon(pokemonName) {
       return pokemon;
     })
     .then((pokemon) => {
+      console.log('[Search] Loading supporting data (types & TCG).');
       fetchTypeRelations(pokemon.types)
-        .then((relations) => renderTypeRelations(relations))
-        .catch(() => renderTypeRelationsError());
+        .then((relations) => {
+          console.log('[Search] Type relations loaded successfully.');
+          renderTypeRelations(relations);
+        })
+        .catch((error) => {
+          console.error('[Search] Failed to load type relations', error);
+          renderTypeRelationsError();
+        });
 
       fetchTcgCards(pokemon.name)
-        .then((cards) => renderTcgCards(cards))
-        .catch(() => renderTcgCardsError());
+        .then((cards) => {
+          console.log(`[Search] Loaded ${cards.length} TCG cards.`);
+          renderTcgCards(cards);
+        })
+        .catch((error) => {
+          console.error('[Search] Failed to load TCG cards', error);
+          renderTcgCardsError();
+        });
     })
     .catch(() => {
       setStatus('Pokémon nicht gefunden oder API nicht erreichbar.', 'danger');
       currentPokemon = null;
+      console.error(`[Search] Lookup failed for ${pokemonName}.`);
       clearPokemonDetails();
       clearTypeRelations();
       clearTcgCards();
@@ -90,15 +111,18 @@ function preloadPokemonNames() {
   fetchAllPokemonNames()
     .then((names) => {
       pokemonNames = names;
+      console.log('[Suggestions] Pokémon name suggestions loaded.');
     })
     .catch(() => {
       // silently ignore, suggestions are optional
+      console.warn('[Suggestions] Could not preload Pokémon names (non-blocking).');
     });
 }
 
 function handleSuggestionRender(term) {
   if (!term || term.length < SUGGESTION_THRESHOLD || !pokemonNames.length) {
     hideSuggestions();
+    console.log('[Suggestions] Term too short or names unavailable, hiding suggestions.');
     return;
   }
 
@@ -112,6 +136,7 @@ function renderSuggestions(term) {
 
   if (!matches.length) {
     hideSuggestions();
+    console.log('[Suggestions] No matches found.');
     return;
   }
 

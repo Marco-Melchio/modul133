@@ -1,13 +1,17 @@
 function getTeam() {
   const stored = localStorage.getItem(TEAM_STORAGE_KEY);
-  return stored ? JSON.parse(stored) : [];
+  const team = stored ? JSON.parse(stored) : [];
+  console.log(`[Team] Loaded ${team.length} Pokémon from storage.`);
+  return team;
 }
 
 function saveTeam(team) {
   localStorage.setItem(TEAM_STORAGE_KEY, JSON.stringify(team));
+  console.log(`[Team] Saved team with ${team.length} Pokémon.`);
 }
 
 function loadTeamFromStorage() {
+  console.log('[Team] Restoring team from local storage.');
   renderTeam(getTeam());
 }
 
@@ -15,11 +19,13 @@ function addPokemonToTeam(pokemon) {
   const team = getTeam();
   if (team.length >= TEAM_LIMIT) {
     setStatus('Team ist bereits voll.', 'warning');
+    console.warn('[Team] Cannot add Pokémon, team is full.');
     return;
   }
 
   if (team.some((member) => member.id === pokemon.id)) {
     setStatus('Dieses Pokémon ist schon im Team.', 'warning');
+    console.warn('[Team] Pokémon already in team, skipping.');
     return;
   }
 
@@ -27,6 +33,7 @@ function addPokemonToTeam(pokemon) {
   saveTeam(updatedTeam);
   renderTeam(updatedTeam);
   setStatus(`${pokemon.name} wurde zum Team hinzugefügt.`, 'success');
+  console.log(`[Team] Added ${pokemon.name} to the team.`);
 }
 
 function removePokemonFromTeam(index) {
@@ -35,6 +42,7 @@ function removePokemonFromTeam(index) {
   saveTeam(updatedTeam);
   renderTeam(updatedTeam);
   setStatus('Pokémon wurde entfernt.', 'info');
+  console.log(`[Team] Removed Pokémon at index ${index}.`);
 }
 
 function renderTeam(team) {
