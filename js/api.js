@@ -1,3 +1,5 @@
+/** POKEMON API *****************************************************/
+
 function fetchPokemon(pokemonName) {
   return $.ajax({
     url: `${POKE_API_BASE}${pokemonName}`,
@@ -21,11 +23,17 @@ function simplifyPokemon(data) {
     sprite:
       data.sprites.other['official-artwork'].front_default ||
       data.sprites.front_default,
-    types: data.types.map((typeInfo) => typeInfo.type.name),
-    stats: data.stats.map((stat) => ({ name: stat.stat.name, value: stat.base_stat })),
-    abilities: data.abilities.map((ability) => ability.ability.name)
+    types: data.types.map((t) => t.type.name),
+    stats: data.stats.map((s) => ({
+      name: s.stat.name,
+      value: s.base_stat
+    })),
+    abilities: data.abilities.map((a) => a.ability.name)
   };
 }
+
+
+/** TYPE RELATIONS *************************************************/
 
 function fetchTypeRelations(types) {
   const uniqueTypes = [...new Set(types)];
@@ -34,6 +42,7 @@ function fetchTypeRelations(types) {
   }
 
   console.log(`[API] Loading type relations for: ${uniqueTypes.join(', ')}`);
+
   const requests = uniqueTypes.map((typeName) =>
     $.ajax({
       url: `${POKE_TYPE_ENDPOINT}${typeName}`,
@@ -64,7 +73,7 @@ function createEmptyRelations() {
 }
 
 function aggregateRelations(responses) {
-  const aggregate = {
+  const agg = {
     strengths: new Set(),
     weaknesses: new Set(),
     resistances: new Set(),
@@ -72,43 +81,53 @@ function aggregateRelations(responses) {
   };
 
   responses.forEach((data) => {
-    addToSet(aggregate.strengths, data.damage_relations.double_damage_to);
-    addToSet(aggregate.weaknesses, data.damage_relations.double_damage_from);
-    addToSet(aggregate.resistances, data.damage_relations.half_damage_from);
-    addToSet(aggregate.immunities, data.damage_relations.no_damage_from);
+    addToSet(agg.strengths, data.damage_relations.double_damage_to);
+    addToSet(agg.weaknesses, data.damage_relations.double_damage_from);
+    addToSet(agg.resistances, data.damage_relations.half_damage_from);
+    addToSet(agg.immunities, data.damage_relations.no_damage_from);
   });
 
   return {
-    strengths: Array.from(aggregate.strengths),
-    weaknesses: Array.from(aggregate.weaknesses),
-    resistances: Array.from(aggregate.resistances),
-    immunities: Array.from(aggregate.immunities)
+    strengths: [...agg.strengths],
+    weaknesses: [...agg.weaknesses],
+    resistances: [...agg.resistances],
+    immunities: [...agg.immunities]
   };
 }
 
 function addToSet(set, relations = []) {
-  relations.forEach((relation) => set.add(relation.name));
+  relations.forEach((r) => set.add(r.name));
 }
+
+
+/** TCGDEX API *****************************************************/
 
 function fetchTcgCards(term) {
   const normalizedTerm = normalizeTcgTerm(term);
+
+  console.log('[API] TCG_ENDPOINT:', TCG_ENDPOINT);
   console.log(`[API] Requesting TCGdex cards for term: ${normalizedTerm || 'alle'}`);
 
-  // TCGdex stellt die Kartendaten ohne API Key zur Verfügung.
+  if (!normalizedTerm) return $.Deferred().resolve([]).promise();
+
+  // Wichtig: TCGdex nutzt KEIN q= für Suche
+  // Korrekt ist name=like:<query>
   return $.ajax({
     url: TCG_ENDPOINT,
     method: 'GET',
     dataType: 'json',
-    timeout: 30000,
-    // Der aktuelle API-Stand verlangt eine Query-Syntax wie "name:<value>".
-    // Die bisherige Abfrage per "?name=" wird vom Gateway mit 403 geblockt.
-    data: normalizedTerm ? { q: `name:${normalizedTerm}` } : {}
+    data: {
+      name: `like:${normalizedTerm}`
+    }
   })
     .then((response) => {
       const normalizedCards = normalizeTcgResponse(response, normalizedTerm).slice(0, 3);
+
       console.log(
-        `[API] TCGdex response for "${normalizedTerm || 'alle'}" returned ${normalizedCards.length} cards.`
+        `[API] TCGdex response for "${normalizedTerm}" returned ${normalizedCards.length} cards.`,
+        normalizedCards
       );
+
       return normalizedCards;
     })
     .catch((error) => {
@@ -127,32 +146,40 @@ function normalizeTcgTerm(term) {
 }
 
 function normalizeTcgResponse(response, normalizedTerm) {
-  const cards = Array.isArray(response) ? response : response?.data || response?.results || [];
+  const cards = Array.isArray(response)
+    ? response
+    : response?.data || response?.results || [];
 
-  if (!Array.isArray(cards)) {
-    return [];
-  }
+  if (!Array.isArray(cards)) return [];
 
-  const filteredCards = normalizedTerm
-    ? cards.filter((card) => card?.name?.toLowerCase().includes(normalizedTerm))
+  const filtered = normalizedTerm
+    ? cards.filter(
+        (card) =>
+          card?.name &&
+          card.name.toLowerCase().includes(normalizedTerm)
+      )
     : cards;
 
-  return filteredCards.map(transformTcgCard).filter(Boolean);
+  return filtered.map(transformTcgCard).filter(Boolean);
 }
 
 function transformTcgCard(card) {
-  if (!card) {
-    return null;
-  }
+  if (!card || !card.name) return null;
 
-  const imageUrl =
-    card.images?.small || card.image?.small || card.image || card.highRes?.small || card.images?.large;
+  const baseImage = card.image || null;
+  const QUALITY = 'high';
+  const EXTENSION = 'png';
+
+  const imageUrl = baseImage
+    ? `${baseImage}/${QUALITY}.${EXTENSION}`
+    : 'img/tcg-placeholder.png'; // Fallback-Bild
 
   const setName =
-    (typeof card.set === 'string' && card.set) ||
     card.set?.name ||
     card.expansion?.name ||
-    card.series?.name;
+    card.series?.name ||
+    card.set ||
+    null;
 
   return {
     name: card.name,
@@ -161,12 +188,12 @@ function transformTcgCard(card) {
   };
 }
 
+/** POKEMON LIST *****************************************************/
+
 let pokemonListPromise = null;
 
 function fetchAllPokemonNames() {
-  if (pokemonListPromise) {
-    return pokemonListPromise;
-  }
+  if (pokemonListPromise) return pokemonListPromise;
 
   pokemonListPromise = $.ajax({
     url: POKEMON_LIST_ENDPOINT,
@@ -174,7 +201,7 @@ function fetchAllPokemonNames() {
     dataType: 'json'
   })
     .then((response) => {
-      const names = (response.results || []).map((pokemon) => pokemon.name);
+      const names = (response.results || []).map((p) => p.name);
       console.log(`[API] Loaded ${names.length} Pokémon names for suggestions.`);
       return names;
     })

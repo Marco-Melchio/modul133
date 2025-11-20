@@ -235,7 +235,7 @@ header .lead {
 .btn-warning {
   background-image: linear-gradient(135deg, var(--pokemon-yellow), #ffb347);
   border: none;
-  color: #3b1d00;
+  color: #ff7b00;
   font-weight: 700;
   box-shadow: 0 12px 25px rgba(255, 221, 87, 0.45);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
