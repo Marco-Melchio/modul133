@@ -74,11 +74,12 @@ function addToSet(set, relations = []) {
 
 function fetchTcgCards(term) {
   const query = buildTcgQuery(term);
-
+  console.log(query)
   return $.ajax({
     url: TCG_ENDPOINT,
     method: 'GET',
     dataType: 'json',
+    timeout: 100000,
     headers: {
       'X-Api-Key': TCG_API_KEY
     },
