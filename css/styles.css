@@ -9,12 +9,12 @@
   --pokemon-gray: #f5f7fb;
   --pokemon-midnight: #0a1a2a;
   --pokemon-shadow: rgba(15, 23, 42, 0.18);
-  --card-border: rgba(255, 255, 255, 0.5);
-  --shadow-soft: 0 10px 28px rgba(10, 26, 42, 0.14);
-  --shadow-soft-hover: 0 16px 42px rgba(10, 26, 42, 0.18);
+  --card-border: rgba(255, 255, 255, 0.363);
+  --shadow-soft: 0 10px 28px rgba(10, 26, 42, 0.096);
+  --shadow-soft-hover: 0 16px 42px rgba(10, 26, 42, 0.075);
   --shadow-inset: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
-  --button-shadow: 0 8px 18px rgba(10, 26, 42, 0.16);
-  --button-shadow-hover: 0 12px 28px rgba(10, 26, 42, 0.2);
+  --button-shadow: 0 8px 18px rgba(77, 77, 77, 0.13);
+  --button-shadow-hover: 0 12px 28px rgba(61, 61, 61, 0.164);
 }
 
 body {
@@ -32,8 +32,7 @@ body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at 25% 30%, rgba(79, 70, 229, 0.1) 0%, transparent 45%),
-    radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.06), transparent 55%);
+  background: linear-gradient(120deg, rgba(255, 53, 93, 0.100), rgb(244, 114, 182, 0.100), rgb(59, 130, 246, 0.100));
   pointer-events: none;
   z-index: -1;
 }
@@ -121,8 +120,7 @@ header .lead {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.35), transparent 40%),
-    radial-gradient(circle at 70% 70%, rgba(59, 130, 246, 0.25), transparent 45%);
+  
   opacity: 0;
   transition: opacity 0.22s ease, transform 0.22s ease;
   z-index: -1;
@@ -202,7 +200,6 @@ header .lead {
 .user-panel {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
   height: 100%;
 }
 
@@ -227,7 +224,7 @@ header .lead {
 }
 
 .auth-button {
-  width: 100%;
+  width: 40%;
   border-radius: 999px;
   padding: 0.8rem 1.25rem;
   letter-spacing: 0.08rem;
@@ -245,7 +242,7 @@ header .lead {
 }
 
 .auth-button--primary {
-  background-image: linear-gradient(135deg, var(--pokemon-blue), var(--pokemon-indigo));
+  background-image: linear-gradient(155deg, #b4d0ff, #302aa5);
   border: none;
   color: var(--pokemon-white);
   background-size: 200% 200%;
@@ -269,6 +266,7 @@ header .lead {
 .auth-button--primary:focus-visible {
   box-shadow: var(--shadow-soft-hover);
   background-position: 100% 0;
+  color: #bcb9ff;
 }
 
 @media (min-width: 576px) {
@@ -278,16 +276,19 @@ header .lead {
 }
 
 .btn-warning {
-  background-image: linear-gradient(135deg, #ff8e72, #ff4747);
+  background-image: linear-gradient(155deg, #ffa993, #ff4747);
   border: none;
   color: white;
   font-weight: 600;
   box-shadow: var(--button-shadow);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: pulseGlow2 6s ease-in-out infinite;
 }
 
 .btn-warning:hover {
+  color: #ffd0d0;
   transform: translateY(-2px);
+  background-image: linear-gradient(155deg, #ff7171, #d64949);
   box-shadow: var(--button-shadow-hover);
 }
 
@@ -302,8 +303,8 @@ header .lead {
 }
 
 #pokemon-input:focus {
-  border-color: var(--pokemon-blue);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+  border-color: var(--pokemon-red);
+  box-shadow: 0 0 0 3px rgba(246, 59, 59, 0.25);
 }
 
 #pokemon-input::placeholder {
@@ -339,16 +340,13 @@ header .lead {
   align-items: center;
   gap: 0.85rem;
   padding: 0.75rem;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.75));
   border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 1.25rem;
-  box-shadow: var(--shadow-soft);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .tcg-card:hover {
   transform: translateY(-6px) scale(1.02);
-  box-shadow: var(--shadow-soft-hover);
 }
 
 .tcg-card__image {
@@ -415,7 +413,7 @@ header .lead {
 .showcase-card {
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.75));
   border-radius: 1.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 0px solid rgba(255, 255, 255, 0.35);
   min-height: 320px;
   position: relative;
   overflow: hidden;
@@ -553,9 +551,9 @@ header .lead {
 }
 
 .btn-success {
-  background-image: linear-gradient(135deg, #22c55e, #16a34a);
+  background-image: linear-gradient(155deg, #7bffab, #16a34a);
   border: none;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border-radius: 999px;
@@ -564,8 +562,15 @@ header .lead {
   color: var(--pokemon-white);
 }
 
+.btn-success:hover {
+  color: #d1ffe2;
+  transform: translateY(-2px);
+  background-image: linear-gradient(155deg, #47f085, #21ad55);
+  box-shadow: var(--button-shadow-hover);
+}
+
 .btn-success:disabled {
-  background: rgba(34, 197, 94, 0.35);
+  background: rgba(103, 255, 158, 0.35);
   box-shadow: none;
 }
 
@@ -713,6 +718,16 @@ main {
   }
   50% {
     box-shadow: 0 10px 26px rgba(59, 130, 246, 0.35);
+  }
+}
+
+@keyframes pulseGlow2 {
+  0%,
+  100% {
+    box-shadow: var(--button-shadow);
+  }
+  50% {
+    box-shadow: 0 10px 26px rgba(246, 59, 59, 0.35);
   }
 }
 
