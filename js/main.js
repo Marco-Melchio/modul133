@@ -1,5 +1,10 @@
+// Aktuell geladenes Pokémon, das zur Detailanzeige und zum Team hinzufügen genutzt wird.
 let currentPokemon = null;
+
+// Cache für alle Pokémon-Namen, um Vorschläge ohne ständige API-Calls zu ermöglichen.
 let pokemonNames = [];
+
+// Konfiguration für Auto-Vervollständigung.
 const SUGGESTION_THRESHOLD = 3;
 const SUGGESTION_LIMIT = 6;
 
@@ -11,6 +16,7 @@ $(document).ready(function () {
   const $pokemonInput = $('#pokemon-input');
   const $suggestions = $('#pokemon-suggestions');
 
+  // Sucht nach einem Pokémon, wenn das Formular abgeschickt wird.
   $('#search-form').on('submit', function (event) {
     event.preventDefault();
     const pokemonName = $pokemonInput.val().trim().toLowerCase();
@@ -23,6 +29,7 @@ $(document).ready(function () {
     searchPokemon(pokemonName);
   });
 
+  // Fügt das aktuell geladene Pokémon dem Team hinzu.
   $('#add-to-team').on('click', function () {
     console.log('[Team] Add to team clicked.');
     if (currentPokemon) {
@@ -33,20 +40,24 @@ $(document).ready(function () {
     }
   });
 
+  // Entfernt ein Pokémon aus dem Team, wenn der Button in der Showcase-Liste geklickt wird.
   $('#team-showcase').on('click', '.showcase-remove-btn', function () {
     const index = Number($(this).data('index'));
     console.log(`[Team] Remove button clicked for index ${index}.`);
     removePokemonFromTeam(index);
   });
 
+  // Rendert Vorschläge während der Eingabe.
   $pokemonInput.on('input', function () {
     handleSuggestionRender($(this).val().trim().toLowerCase());
   });
 
+  // Zeigt Vorschläge erneut an, sobald das Feld den Fokus erhält.
   $pokemonInput.on('focus', function () {
     handleSuggestionRender($(this).val().trim().toLowerCase());
   });
 
+  // Lädt ein zufälliges Pokémon und befüllt das Eingabefeld damit.
   $('#random-search').on('click', function () {
     console.log('[Random] Random search requested.');
     disableTeamButton();
@@ -65,6 +76,7 @@ $(document).ready(function () {
       });
   });
 
+  // Übernimmt einen Vorschlag aus der Liste in das Eingabefeld.
   $suggestions.on('click', '.suggestion-item', function () {
     const name = $(this).data('name');
     $pokemonInput.val(name);
@@ -72,6 +84,7 @@ $(document).ready(function () {
     searchPokemon(name);
   });
 
+  // Schließt die Vorschlagsliste, wenn ausserhalb geklickt wird.
   $(document).on('click', function (event) {
     if (!$(event.target).closest('#pokemon-input, #pokemon-suggestions').length) {
       hideSuggestions();
@@ -79,6 +92,7 @@ $(document).ready(function () {
   });
 });
 
+// Zentraler Suchablauf: lädt Pokémon, Typ-Beziehungen und TCG-Karten und aktualisiert die UI.
 function searchPokemon(pokemonName) {
   console.log(`[Search] Starting lookup for ${pokemonName}.`);
   setStatus('Lade Daten...', 'info');
@@ -128,6 +142,7 @@ function searchPokemon(pokemonName) {
     });
 }
 
+// Lädt Namen einmalig vor, damit die Vorschläge sofort reagieren.
 function preloadPokemonNames() {
   fetchAllPokemonNames()
     .then((names) => {
@@ -140,6 +155,7 @@ function preloadPokemonNames() {
     });
 }
 
+// Zeigt die Vorschläge nur an, wenn der eingegebene Begriff lang genug ist.
 function handleSuggestionRender(term) {
   if (!term || term.length < SUGGESTION_THRESHOLD || !pokemonNames.length) {
     hideSuggestions();
@@ -150,6 +166,7 @@ function handleSuggestionRender(term) {
   renderSuggestions(term);
 }
 
+// Baut die HTML-Liste für die passenden Vorschläge.
 function renderSuggestions(term) {
   const matches = pokemonNames
     .filter((name) => name.includes(term))
@@ -174,10 +191,12 @@ function renderSuggestions(term) {
   $('#pokemon-suggestions').html(options).addClass('suggestions--visible');
 }
 
+// Blendet die Vorschlagsliste aus.
 function hideSuggestions() {
   $('#pokemon-suggestions').removeClass('suggestions--visible').empty();
 }
 
+// Leert die aktuelle Detailansicht und deaktiviert den Team-Button.
 function resetCurrentPokemonView() {
   currentPokemon = null;
   clearPokemonDetails();
@@ -186,6 +205,7 @@ function resetCurrentPokemonView() {
   disableTeamButton();
 }
 
+// Liefert einen zufälligen Pokémon-Namen aus dem Cache oder lädt ihn bei Bedarf nach.
 function getRandomPokemonName() {
   if (pokemonNames.length) {
     return Promise.resolve(selectRandomName(pokemonNames));
@@ -202,6 +222,7 @@ function getRandomPokemonName() {
     });
 }
 
+// Helfer um einen zufälligen Namen aus einem Array auszuwählen.
 function selectRandomName(names) {
   if (!names || !names.length) {
     throw new Error('No Pokémon names available');

@@ -1,4 +1,5 @@
 
+/* Farbvariablen und generelle Token für Schatten/Abstände */
 :root {
   --pokemon-red: #ff355e;
   --pokemon-red-dark: #a60027;
@@ -17,6 +18,7 @@
   --button-shadow-hover: 0 12px 28px rgba(61, 61, 61, 0.164);
 }
 
+/* Globale Layout- und Hintergrunddefinitionen */
 body {
   min-height: 100vh;
   font-family: 'Poppins', sans-serif;
@@ -42,6 +44,7 @@ body::before {
   color: inherit;
 }
 
+/* Header mit animiertem Farbverlauf und dezentem Blur */
 header {
   position: relative;
   overflow: hidden;
@@ -82,6 +85,7 @@ header .lead {
   color: var(--pokemon-white);
 }
 
+/* Kartenrahmen und Hover-Effekte im Glassmorphism-Stil */
 .card {
   background: rgba(255, 255, 255, 0.85);
   border-radius: 1.5rem;
@@ -107,6 +111,7 @@ header .lead {
   color: inherit;
 }
 
+/* Buttons mit animiertem Lichtschein und runden Kanten */
 .btn-animated {
   position: relative;
   overflow: hidden;
@@ -146,6 +151,7 @@ header .lead {
 }
 
 
+/* Suchbereich mit responsivem Grid für Eingabe + Aktion */
 .search-panel {
   display: flex;
   flex-direction: column;
@@ -197,6 +203,7 @@ header .lead {
   }
 }
 
+/* Panel für Zufallssuche und User-Aktionen */
 .user-panel {
   display: flex;
   flex-direction: column;
@@ -292,6 +299,7 @@ header .lead {
   box-shadow: var(--button-shadow-hover);
 }
 
+/* Suchfeld mit Fokus-Schatten für bessere Auffindbarkeit */
 #pokemon-input {
   height: 50px;
   background-color: rgba(255, 255, 255, 0.7);
@@ -311,6 +319,7 @@ header .lead {
   color: rgba(15, 23, 42, 0.45);
 }
 
+/* Details, Stat-Bars und Kartenkacheln */
 #pokemon-details img {
   width: 100%;
   max-width: 220px;
@@ -399,6 +408,7 @@ header .lead {
   box-shadow: var(--shadow-soft);
 }
 
+/* Team-Showcase Layout mit Hover-Stats Overlay */
 .team-slot {
   display: flex;
   flex-direction: column;
@@ -516,6 +526,7 @@ header .lead {
   color: rgba(10, 26, 42, 0.4);
 }
 
+/* Autocomplete-Suggestions Styling */
 .suggestions {
   position: static;
   width: 100%;
@@ -550,6 +561,7 @@ header .lead {
   color: #0f172a;
 }
 
+/* Buttons, Badges und Typ-Farben */
 .btn-success {
   background-image: linear-gradient(155deg, #7bffab, #16a34a);
   border: none;
@@ -676,6 +688,7 @@ main {
   text-transform: uppercase;
 }
 
+/* Animationsdefinitionen und Reduced-Motion-Opt-Out */
 @keyframes gradientShift {
   0% {
     background-position: 0% 50%;

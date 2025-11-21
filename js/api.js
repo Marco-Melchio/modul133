@@ -1,5 +1,7 @@
 /** POKEMON API *****************************************************/
 
+// Lädt die detaillierten Daten eines Pokémon und transformiert sie direkt in ein
+// vereinfachtes Objekt, das von der UI genutzt werden kann.
 function fetchPokemon(pokemonName) {
   return $.ajax({
     url: `${POKE_API_BASE}${pokemonName}`,
@@ -16,6 +18,7 @@ function fetchPokemon(pokemonName) {
     });
 }
 
+// Reduziert das umfangreiche PokeAPI-Objekt auf die Eigenschaften, die wir in der App anzeigen.
 function simplifyPokemon(data) {
   return {
     id: data.id,
@@ -35,6 +38,7 @@ function simplifyPokemon(data) {
 
 /** TYPE RELATIONS *************************************************/
 
+// Holt zu den Pokémon-Typen alle Stärken/Schwächen aus der API.
 function fetchTypeRelations(types) {
   const uniqueTypes = [...new Set(types)];
   if (!uniqueTypes.length) {
@@ -43,6 +47,7 @@ function fetchTypeRelations(types) {
 
   console.log(`[API] Loading type relations for: ${uniqueTypes.join(', ')}`);
 
+  // Für jeden Typ wird ein API-Aufruf gesammelt und anschließend aggregiert ausgewertet.
   const requests = uniqueTypes.map((typeName) =>
     $.ajax({
       url: `${POKE_TYPE_ENDPOINT}${typeName}`,
@@ -63,6 +68,7 @@ function fetchTypeRelations(types) {
     });
 }
 
+// Hilfsfunktion um leere Arrays für das UI zurückzugeben, falls keine Typen vorhanden sind.
 function createEmptyRelations() {
   return {
     strengths: [],
@@ -72,6 +78,7 @@ function createEmptyRelations() {
   };
 }
 
+// Fasst die Antworten mehrerer Typabfragen zusammen und entfernt Duplikate via Set.
 function aggregateRelations(responses) {
   const agg = {
     strengths: new Set(),
@@ -95,6 +102,7 @@ function aggregateRelations(responses) {
   };
 }
 
+// Fügt alle relativen Typnamen in ein Set ein, um doppelte Einträge zu vermeiden.
 function addToSet(set, relations = []) {
   relations.forEach((r) => set.add(r.name));
 }
@@ -102,6 +110,7 @@ function addToSet(set, relations = []) {
 
 /** TCGDEX API *****************************************************/
 
+// Fragt die TCGdex API ab, um Karten zu einem Suchbegriff zu laden; leere Eingaben liefern ein leeres Array.
 function fetchTcgCards(term) {
   const normalizedTerm = normalizeTcgTerm(term);
 
@@ -134,6 +143,7 @@ function fetchTcgCards(term) {
     });
 }
 
+// Bereitet den Suchbegriff auf, indem Sonderzeichen und Mehrfachleerzeichen entfernt werden.
 function normalizeTcgTerm(term) {
   return (term || '')
     .toString()
@@ -143,6 +153,7 @@ function normalizeTcgTerm(term) {
     .replace(/\s+/g, ' ');
 }
 
+// Wandelt die TCGdex API Antwort in ein konsistentes Karten-Array um und filtert nach dem Suchbegriff.
 function normalizeTcgResponse(response, normalizedTerm) {
   const cards = Array.isArray(response)
     ? response
@@ -161,6 +172,7 @@ function normalizeTcgResponse(response, normalizedTerm) {
   return filtered.map(transformTcgCard).filter(Boolean);
 }
 
+// Formatiert eine einzelne Karte und liefert ein vereinheitlichtes Objekt für die Galerie.
 function transformTcgCard(card) {
   if (!card || !card.name) return null;
 
@@ -188,8 +200,10 @@ function transformTcgCard(card) {
 
 /** POKEMON LIST *****************************************************/
 
+// Zwischenspeicher für die komplette Pokémon-Namensliste, damit die API nicht mehrfach aufgerufen wird.
 let pokemonListPromise = null;
 
+// Lädt einmalig alle Pokémon-Namen für die Auto-Vervollständigung und cached das Ergebnis.
 function fetchAllPokemonNames() {
   if (pokemonListPromise) return pokemonListPromise;
 

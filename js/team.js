@@ -1,3 +1,4 @@
+// Liest das gespeicherte Team aus dem Local Storage und gibt ein Array zurück.
 function getTeam() {
   const stored = localStorage.getItem(TEAM_STORAGE_KEY);
   const team = stored ? JSON.parse(stored) : [];
@@ -5,16 +6,19 @@ function getTeam() {
   return team;
 }
 
+// Persistiert das Team im Local Storage.
 function saveTeam(team) {
   localStorage.setItem(TEAM_STORAGE_KEY, JSON.stringify(team));
   console.log(`[Team] Saved team with ${team.length} Pokémon.`);
 }
 
+// Stellt das Team beim Laden der Seite wieder her.
 function loadTeamFromStorage() {
   console.log('[Team] Restoring team from local storage.');
   renderTeam(getTeam());
 }
 
+// Fügt ein Pokémon hinzu, sofern Kapazität frei ist und es nicht doppelt existiert.
 function addPokemonToTeam(pokemon) {
   const team = getTeam();
   if (team.length >= TEAM_LIMIT) {
@@ -37,6 +41,7 @@ function addPokemonToTeam(pokemon) {
   return true;
 }
 
+// Entfernt einen Eintrag anhand des Indexes aus dem Team.
 function removePokemonFromTeam(index) {
   const team = getTeam();
   const updatedTeam = team.filter((_, i) => i !== index);
@@ -46,10 +51,12 @@ function removePokemonFromTeam(index) {
   console.log(`[Team] Removed Pokémon at index ${index}.`);
 }
 
+// Rendert aktuell nur die Showcase-Ansicht, kann später erweitert werden.
 function renderTeam(team) {
   renderTeamShowcase(team);
 }
 
+// Baut die visuelle Showcase-Anzeige mit Stats-Overlay und freien Slots.
 function renderTeamShowcase(team) {
   const showcaseItems = team
     .map((pokemon, index) => {

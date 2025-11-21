@@ -1,3 +1,4 @@
+// Zeigt eine Statusmeldung oberhalb der Suche an.
 function setStatus(message, type) {
   $('#status-message')
     .hide()
@@ -6,10 +7,12 @@ function setStatus(message, type) {
     .fadeIn(200);
 }
 
+// Deaktiviert den Button zum Hinzufügen zum Team (z. B. wenn kein Pokémon geladen ist).
 function disableTeamButton() {
   $('#add-to-team').prop('disabled', true);
 }
 
+// Baut das Detailpanel für das aktuell geladene Pokémon.
 function renderPokemonDetails(pokemon) {
   const details = `
     <div class="col-12 col-lg-4 text-center">
@@ -42,11 +45,13 @@ function renderPokemonDetails(pokemon) {
   $('#pokemon-details').html(details);
 }
 
+// Entfernt die Detailansicht und deaktiviert den Team-Button.
 function clearPokemonDetails() {
   $('#pokemon-details').empty();
   disableTeamButton();
 }
 
+// Platzhalter während Stärke-/Schwäche-Abfragen laufen.
 function showTypeRelationsLoading() {
   const loading =
     '<div class="type-relations-placeholder text-muted">Stärken und Schwächen werden geladen...</div>';
@@ -55,6 +60,7 @@ function showTypeRelationsLoading() {
   $('#weakness-relations').html(loading);
 }
 
+// Stellt Stärken und Schwächen nebeneinander dar.
 function renderTypeRelations(relations) {
   $('#strength-relations').html(
     renderRelationContent(relations.strengths, 'Keine offensichtlichen Stärken.')
@@ -62,6 +68,7 @@ function renderTypeRelations(relations) {
   $('#weakness-relations').html(renderRelationContent(relations.weaknesses, 'Keine direkten Schwächen.'));
 }
 
+// Wandelt die Relation-Arrays in eine Liste von Badges um.
 function renderRelationContent(values, emptyMessage) {
   if (!values.length) {
     return `<p class="relations-panel__empty">${emptyMessage}</p>`;
@@ -73,6 +80,7 @@ function renderRelationContent(values, emptyMessage) {
     </ul>`;
 }
 
+// Setzt die Bereichsausgabe zurück, wenn kein Pokémon geladen ist.
 function clearTypeRelations() {
   $('#strength-relations').html(
     '<div class="type-relations-placeholder text-muted">Keine Daten verfügbar.</div>'
@@ -82,10 +90,12 @@ function clearTypeRelations() {
   );
 }
 
+// Kurzer Ladehinweis für die TCG-Sektion.
 function showTcgLoading() {
   $('#tcg-cards').html('<p>Karten werden geladen...</p>');
 }
 
+// Baut die Karten-Galerie für maximal vier Karten auf.
 function renderTcgCards(cards) {
   if (!cards.length) {
     $('#tcg-cards').html('<p>Keine Karten verfügbar.</p>');
@@ -110,14 +120,17 @@ function renderTcgCards(cards) {
   $('#tcg-cards').hide().html(html).fadeIn(300);
 }
 
+// Rückfallausgabe, wenn keine Karten gefunden werden oder kein Suchbegriff vorliegt.
 function clearTcgCards() {
   $('#tcg-cards').html('<p>Keine Karten verfügbar.</p>');
 }
 
+// Fehlerausgabe für die TCG API.
 function renderTcgCardsError() {
   $('#tcg-cards').html('<p>TCG API nicht erreichbar.</p>');
 }
 
+// Zeigt eine Warnung an, falls Typbeziehungen nicht geladen werden konnten.
 function renderTypeRelationsError() {
   const errorMessage =
     '<div class="type-relations-placeholder text-warning">Beziehungen konnten nicht geladen werden.</div>';
@@ -126,6 +139,7 @@ function renderTypeRelationsError() {
   $('#weakness-relations').html(errorMessage);
 }
 
+// Kleine Fade-In-Animation, um neue Inhalte hervorzuheben.
 function animateSection(selector) {
   $(selector).hide().fadeIn(400);
 }
