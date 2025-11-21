@@ -47,6 +47,24 @@ $(document).ready(function () {
     handleSuggestionRender($(this).val().trim().toLowerCase());
   });
 
+  $('#random-search').on('click', function () {
+    console.log('[Random] Random search requested.');
+    disableTeamButton();
+    hideSuggestions();
+    setStatus('Zufälliges Pokémon wird geladen...', 'info');
+
+    getRandomPokemonName()
+      .then((name) => {
+        console.log(`[Random] Selected Pokémon: ${name}.`);
+        $pokemonInput.val(name);
+        searchPokemon(name);
+      })
+      .catch((error) => {
+        console.error('[Random] Failed to load random Pokémon.', error);
+        setStatus('Kein zufälliges Pokémon gefunden.', 'danger');
+      });
+  });
+
   $suggestions.on('click', '.suggestion-item', function () {
     const name = $(this).data('name');
     $pokemonInput.val(name);
@@ -166,4 +184,29 @@ function resetCurrentPokemonView() {
   clearTypeRelations();
   clearTcgCards();
   disableTeamButton();
+}
+
+function getRandomPokemonName() {
+  if (pokemonNames.length) {
+    return Promise.resolve(selectRandomName(pokemonNames));
+  }
+
+  return fetchAllPokemonNames()
+    .then((names) => {
+      pokemonNames = names;
+      return selectRandomName(names);
+    })
+    .catch((error) => {
+      console.warn('[Random] Could not preload Pokémon names.', error);
+      return Promise.reject(error);
+    });
+}
+
+function selectRandomName(names) {
+  if (!names || !names.length) {
+    throw new Error('No Pokémon names available');
+  }
+
+  const randomIndex = Math.floor(Math.random() * names.length);
+  return names[randomIndex];
 }
