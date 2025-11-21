@@ -223,7 +223,7 @@ header .lead {
   gap: 0.75rem;
 }
 
-.auth-button {
+.user-panel__button {
   width: 40%;
   border-radius: 999px;
   padding: 0.8rem 1.25rem;
@@ -235,13 +235,13 @@ header .lead {
   box-shadow: var(--button-shadow);
 }
 
-.auth-button--ghost {
+.user-panel__button--ghost {
   background-color: transparent;
   border: 1px solid rgba(15, 23, 42, 0.2);
   color: var(--pokemon-midnight);
 }
 
-.auth-button--primary {
+.user-panel__button--primary {
   background-image: linear-gradient(155deg, #b4d0ff, #302aa5);
   border: none;
   color: var(--pokemon-white);
@@ -249,21 +249,21 @@ header .lead {
   animation: pulseGlow 6s ease-in-out infinite;
 }
 
-.auth-button:hover,
-.auth-button:focus-visible {
+.user-panel__button:hover,
+.user-panel__button:focus-visible {
   transform: translateY(-2px);
   box-shadow: var(--button-shadow-hover);
 
 }
 
-.auth-button--ghost:hover,
-.auth-button--ghost:focus-visible {
+.user-panel__button--ghost:hover,
+.user-panel__button--ghost:focus-visible {
   background-color: rgba(59, 130, 246, 0.08);
   border-color: rgba(59, 130, 246, 0.45);
 }
 
-.auth-button--primary:hover,
-.auth-button--primary:focus-visible {
+.user-panel__button--primary:hover,
+.user-panel__button--primary:focus-visible {
   box-shadow: var(--shadow-soft-hover);
   background-position: 100% 0;
   color: #bcb9ff;
