@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
   <head>
+    <!-- Basis-Setup des Dokuments und Laden der Schriften/CSS-Abhängigkeiten -->
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,6 +21,7 @@
     <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body class="pokemon-theme">
+    <!-- Hero-Bereich mit Titel und Untertitel -->
     <header class="py-4 mb-4 shadow">
       <div class="container">
         <h1 class="display-5 fw-bold text-center text-uppercase">
@@ -32,6 +34,7 @@
     </header>
 
     <main class="container pb-5">
+      <!-- Globale Statusmeldungen werden hier ausgespielt -->
       <section class="row g-4 align-items-start">
         <div class="col-12">
           <div
@@ -101,6 +104,7 @@
         </div>
       </section>
 
+      <!-- Detaildarstellung des aktuell geladenen Pokémon inkl. Add-to-Team -->
       <section class="row g-4 mt-1">
         <div class="col-12">
           <div class="card border-0 ">
@@ -121,6 +125,7 @@
         </div>
       </section>
 
+      <!-- Typenbeziehungen und TCG-Karten-Galerie -->
       <section class="row g-4 mt-1">
         <div class="col-12 col-lg-6">
           <div class="card border-0 h-100">
@@ -152,6 +157,7 @@
         </div>
       </section>
 
+      <!-- Showcase der zusammengestellten Teams mit max. 6 Slots -->
       <section class="row g-4 mt-1">
         <div class="col-12">
           <div class="card border-0">
@@ -167,6 +173,7 @@
       </section>
     </main>
 
+    <!-- Skriptreihenfolge: Konstanten -> API -> Team-Logik -> UI-Renderer -> App-Init -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/constants.js"></script>
