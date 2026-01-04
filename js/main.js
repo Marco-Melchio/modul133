@@ -1,4 +1,5 @@
 // Aktuell geladenes Pokémon, das zur Detailanzeige und zum Team hinzufügen genutzt wird.
+// Wird immer gesetzt, nachdem searchPokemon erfolgreich war.
 window.currentPokemon = null;
 
 // Cache für alle Pokémon-Namen, um Vorschläge ohne ständige API-Calls zu ermöglichen.
@@ -17,6 +18,7 @@ $(document).ready(function () {
   const $suggestions = $('#pokemon-suggestions');
 
   // Sucht nach einem Pokémon, wenn das Formular abgeschickt wird.
+  // Hinweis: die Eingabe wird auf Kleinbuchstaben getrimmt, damit API-Requests nicht fehlschlagen.
   $('#search-form').on('submit', function (event) {
     event.preventDefault();
     const pokemonName = $pokemonInput.val().trim().toLowerCase();
@@ -30,6 +32,7 @@ $(document).ready(function () {
   });
 
   // Fügt das aktuell geladene Pokémon dem Team hinzu.
+  // Nach erfolgreichem Hinzufügen wird die Detailansicht geleert, damit klar ist, was bereits im Team ist.
   $('#add-to-team').on('click', function () {
     console.log('[Team] Add to team clicked.');
     if (window.currentPokemon) {
@@ -41,6 +44,7 @@ $(document).ready(function () {
   });
 
   // Entfernt ein Pokémon aus dem Team, wenn der Button in der Showcase-Liste geklickt wird.
+  // Der Index kommt aus dem data-Attribut des jeweiligen Buttons.
   $('#team-showcase').on('click', '.showcase-remove-btn', function () {
     const index = Number($(this).data('index'));
     console.log(`[Team] Remove button clicked for index ${index}.`);
@@ -48,6 +52,7 @@ $(document).ready(function () {
   });
 
   // Rendert Vorschläge während der Eingabe.
+  // Sobald der Begriff zu kurz ist, werden die Vorschläge ausgeblendet.
   $pokemonInput.on('input', function () {
     handleSuggestionRender($(this).val().trim().toLowerCase());
   });
@@ -58,6 +63,7 @@ $(document).ready(function () {
   });
 
   // Lädt ein zufälliges Pokémon und befüllt das Eingabefeld damit.
+  // Der Statushinweis informiert Nutzer, falls der Zufallsaufruf fehlschlägt.
   $('#random-search').on('click', function () {
     console.log('[Random] Random search requested.');
     disableTeamButton();
@@ -77,6 +83,7 @@ $(document).ready(function () {
   });
 
   // Übernimmt einen Vorschlag aus der Liste in das Eingabefeld.
+  // Danach wird sofort die Suche gestartet, damit der Klick direkte Wirkung zeigt.
   $suggestions.on('click', '.suggestion-item', function () {
     const name = $(this).data('name');
     $pokemonInput.val(name);
@@ -85,6 +92,7 @@ $(document).ready(function () {
   });
 
   // Schließt die Vorschlagsliste, wenn ausserhalb geklickt wird.
+  // So bleibt die UI aufgeräumt, wenn Nutzer an eine andere Stelle klicken.
   $(document).on('click', function (event) {
     if (!$(event.target).closest('#pokemon-input, #pokemon-suggestions').length) {
       hideSuggestions();

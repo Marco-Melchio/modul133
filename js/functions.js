@@ -2,6 +2,7 @@
 
 // Lädt die detaillierten Daten eines Pokémon und transformiert sie direkt in ein
 // vereinfachtes Objekt, das von der UI genutzt werden kann.
+// Rückgabe: Promise mit einem schlanken Objekt, das nur die benötigten Felder enthält.
 function fetchPokemon(pokemonName) {
   return $.ajax({
     url: `${POKE_API_BASE}${pokemonName}`,
@@ -19,6 +20,7 @@ function fetchPokemon(pokemonName) {
 }
 
 // Reduziert das umfangreiche PokeAPI-Objekt auf die Eigenschaften, die wir in der App anzeigen.
+// So bleibt die UI-Logik unabhängig von den Rohdaten der API.
 function simplifyPokemon(data) {
   return {
     id: data.id,
@@ -38,6 +40,7 @@ function simplifyPokemon(data) {
 /** TYPE RELATIONS *************************************************/
 
 // Holt zu den Pokémon-Typen alle Stärken/Schwächen aus der API.
+// Mehrere Typen werden parallel angefragt und danach zusammengeführt.
 function fetchTypeRelations(types) {
   const uniqueTypes = [...new Set(types)];
   if (!uniqueTypes.length) {
@@ -46,7 +49,7 @@ function fetchTypeRelations(types) {
 
   console.log(`[API] Loading type relations for: ${uniqueTypes.join(', ')}`);
 
-  // Für jeden Typ wird ein API-Aufruf gesammelt und anschließend aggregiert ausgewertet.
+  // Für jeden Typ wird ein AJAX-Request vorbereitet und später gemeinsam ausgewertet.
   const requests = uniqueTypes.map((typeName) =>
     $.ajax({
       url: `${POKE_TYPE_ENDPOINT}${typeName}`,
@@ -78,6 +81,7 @@ function createEmptyRelations() {
 }
 
 // Fasst die Antworten mehrerer Typabfragen zusammen und entfernt Duplikate via Set.
+// Ergebnis: ein Objekt mit einzigartigen Typnamen pro Kategorie.
 function aggregateRelations(responses) {
   const agg = {
     strengths: new Set(),
@@ -109,6 +113,7 @@ function addToSet(set, relations = []) {
 /** POKÉMON TCG API *************************************************/
 
 // Fragt die Pokémon TCG API ab, um Karten zu einem Suchbegriff zu laden; leere Eingaben liefern ein leeres Array.
+// Die API liefert deutlich mehr Ergebnisse, deshalb begrenzen wir per pageSize auf vier Karten.
 function fetchTcgCards(term) {
   const normalizedTerm = normalizeTcgTerm(term);
 
@@ -143,6 +148,7 @@ function fetchTcgCards(term) {
 }
 
 // Bereitet den Suchbegriff auf, indem Sonderzeichen und Mehrfachleerzeichen entfernt werden.
+// Dadurch schlagen API-Queries nicht fehl, wenn der Nutzer z. B. Anführungszeichen eintippt.
 function normalizeTcgTerm(term) {
   return (term || '')
     .toString()
@@ -153,6 +159,7 @@ function normalizeTcgTerm(term) {
 }
 
 // Wandelt die Pokémon TCG API Antwort in ein konsistentes Karten-Array um und filtert nach dem Suchbegriff.
+// Gleichzeitig werden Null-Werte entfernt, damit die UI sauber rendert.
 function normalizeTcgResponse(response, normalizedTerm) {
   const cards = Array.isArray(response) ? response : response?.data || [];
 
@@ -170,6 +177,7 @@ function normalizeTcgResponse(response, normalizedTerm) {
 }
 
 // Formatiert eine einzelne Karte und liefert ein vereinheitlichtes Objekt für die Galerie.
+// Falls keine Bildquelle existiert, wird ein Platzhalter verwendet.
 function transformTcgCard(card) {
   if (!card || !card.name) return null;
 
@@ -194,6 +202,7 @@ function transformTcgCard(card) {
 /** TEAM MANAGEMENT *************************************************/
 
 // Liest das gespeicherte Team aus dem Local Storage und gibt ein Array zurück.
+// Fehlende Einträge werden als leeres Array zurückgegeben, damit die Aufrufer nicht crashen.
 function getTeam() {
   const stored = localStorage.getItem(TEAM_STORAGE_KEY);
   const team = stored ? JSON.parse(stored) : [];
@@ -208,12 +217,14 @@ function saveTeam(team) {
 }
 
 // Stellt das Team beim Laden der Seite wieder her.
+// Wird bei App-Start aufgerufen, damit vorhandene Einträge sofort sichtbar sind.
 function loadTeamFromStorage() {
   console.log('[Team] Restoring team from local storage.');
   renderTeam(getTeam());
 }
 
 // Fügt ein Pokémon hinzu, sofern Kapazität frei ist und es nicht doppelt existiert.
+// Rückgabe: true bei Erfolg, false bei Fehlversuch (voll oder Duplikat).
 function addPokemonToTeam(pokemon) {
   const team = getTeam();
   if (team.length >= TEAM_LIMIT) {
@@ -247,11 +258,13 @@ function removePokemonFromTeam(index) {
 }
 
 // Rendert aktuell nur die Showcase-Ansicht, kann später erweitert werden.
+// Idee: hier könnte man weitere Darstellungen (z. B. Liste oder Tabelle) ergänzen.
 function renderTeam(team) {
   renderTeamShowcase(team);
 }
 
 // Baut die visuelle Showcase-Anzeige mit Stats-Overlay und freien Slots.
+// Für jedes Pokémon werden Abbildung, Typen, Fähigkeiten und Stats-Overlay erzeugt.
 function renderTeamShowcase(team) {
   const showcaseItems = team
     .map((pokemon, index) => {
@@ -319,6 +332,7 @@ function renderTeamShowcase(team) {
 /** UI HELPERS *****************************************************/
 
 // Zeigt eine Statusmeldung oberhalb der Suche an.
+// Typen (success, warning, info, danger) steuern das Farbschema per CSS.
 function setStatus(message, type) {
   $('#status-message')
     .hide()
@@ -333,6 +347,7 @@ function disableTeamButton() {
 }
 
 // Baut das Detailpanel für das aktuell geladene Pokémon.
+// Enthält Artwork, Typen, Fähigkeiten und eine kleine Stat-Progressbar.
 function renderPokemonDetails(pokemon) {
   const details = `
     <div class="col-12 col-lg-4 text-center">
@@ -381,6 +396,7 @@ function showTypeRelationsLoading() {
 }
 
 // Stellt Stärken und Schwächen nebeneinander dar.
+// Im Fehlerfall wird eine platzhalterhafte Meldung angezeigt.
 function renderTypeRelations(relations) {
   $('#strength-relations').html(
     renderRelationContent(relations.strengths, 'Keine offensichtlichen Stärken.')
@@ -389,6 +405,7 @@ function renderTypeRelations(relations) {
 }
 
 // Wandelt die Relation-Arrays in eine Liste von Badges um.
+// Falls keine Daten vorhanden sind, wird ein Standardtext angezeigt.
 function renderRelationContent(values, emptyMessage) {
   if (!values.length) {
     return `<p class="relations-panel__empty">${emptyMessage}</p>`;
@@ -416,6 +433,7 @@ function showTcgLoading() {
 }
 
 // Baut die Karten-Galerie für maximal vier Karten auf.
+// Mehr Karten würden das Layout sprengen, daher begrenzen wir die Auswahl im Frontend.
 function renderTcgCards(cards) {
   if (!cards.length) {
     $('#tcg-cards').html('<p>Keine Karten verfügbar.</p>');
@@ -467,6 +485,7 @@ function animateSection(selector) {
 /** APP LOGIC *****************************************************/
 
 // Zentraler Suchablauf: lädt Pokémon, Typ-Beziehungen und TCG-Karten und aktualisiert die UI.
+// Der Ablauf ist bewusst in then-Ketten aufgeteilt, damit Fehler separat behandelt werden können.
 function searchPokemon(pokemonName) {
   console.log(`[Search] Starting lookup for ${pokemonName}.`);
   setStatus('Lade Daten...', 'info');
@@ -517,6 +536,7 @@ function searchPokemon(pokemonName) {
 }
 
 // Lädt Namen einmalig vor, damit die Vorschläge sofort reagieren.
+// Das Feature ist optional – schlägt der Request fehl, funktioniert die App trotzdem.
 function preloadPokemonNames() {
   fetchAllPokemonNames()
     .then((names) => {
@@ -530,6 +550,7 @@ function preloadPokemonNames() {
 }
 
 // Zeigt die Vorschläge nur an, wenn der eingegebene Begriff lang genug ist.
+// Zusätzlich wird geprüft, ob überhaupt Namensdaten vorhanden sind.
 function handleSuggestionRender(term) {
   if (!term || term.length < window.SUGGESTION_THRESHOLD || !window.pokemonNames.length) {
     hideSuggestions();
@@ -541,6 +562,7 @@ function handleSuggestionRender(term) {
 }
 
 // Baut die HTML-Liste für die passenden Vorschläge.
+// Es werden maximal SUGGESTION_LIMIT Einträge angezeigt, um die Liste kurz zu halten.
 function renderSuggestions(term) {
   const matches = window.pokemonNames
     .filter((name) => name.includes(term))
@@ -580,6 +602,7 @@ function resetCurrentPokemonView() {
 }
 
 // Liefert einen zufälligen Pokémon-Namen aus dem Cache oder lädt ihn bei Bedarf nach.
+// Das vereinfacht den "Zufallspokémon"-Button im UI.
 function getRandomPokemonName() {
   if (window.pokemonNames.length) {
     return Promise.resolve(selectRandomName(window.pokemonNames));
@@ -607,6 +630,7 @@ function selectRandomName(names) {
 }
 
 // Lädt einmalig alle Pokémon-Namen von der API.
+// Diese Daten werden für Autocomplete und Zufallsauswahl genutzt.
 function fetchAllPokemonNames() {
   return $.ajax({
     url: POKEMON_LIST_ENDPOINT,
