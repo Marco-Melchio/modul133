@@ -1,6 +1,6 @@
 # Pokémon Team Builder
 
-Dieses Single-Page-Tool hilft dir dabei, schnell ein eigenes Pokémon-Team zusammenzustellen. Die Anwendung erklärt sich nun komplett auf Deutsch – von der Codebasis bis zur Anleitung – und eignet sich damit auch für Einsteiger, die die PokeAPI oder jQuery noch nicht kennen.
+Dieses Single-Page-Tool hilft dir dabei, schnell ein eigenes Pokémon-Team zusammenzustellen.
 
 ## Was die App kann
 - **Pokémon-Suche:** Namen eintippen (oder Zufallsbutton nutzen) und sofort offizielle Artworks, Stats, Typen und Fähigkeiten sehen.
