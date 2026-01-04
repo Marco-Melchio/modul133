@@ -106,14 +106,14 @@ function addToSet(set, relations = []) {
   relations.forEach((r) => set.add(r.name));
 }
 
-/** TCGDEX API *****************************************************/
+/** POKÉMON TCG API *************************************************/
 
-// Fragt die TCGdex API ab, um Karten zu einem Suchbegriff zu laden; leere Eingaben liefern ein leeres Array.
+// Fragt die Pokémon TCG API ab, um Karten zu einem Suchbegriff zu laden; leere Eingaben liefern ein leeres Array.
 function fetchTcgCards(term) {
   const normalizedTerm = normalizeTcgTerm(term);
 
   console.log('[API] TCG_ENDPOINT:', TCG_ENDPOINT);
-  console.log(`[API] Requesting TCGdex cards for term: ${normalizedTerm || 'alle'}`);
+  console.log(`[API] Requesting Pokémon TCG cards for term: ${normalizedTerm || 'alle'}`);
 
   if (!normalizedTerm) return $.Deferred().resolve([]).promise();
 
@@ -122,14 +122,15 @@ function fetchTcgCards(term) {
     method: 'GET',
     dataType: 'json',
     data: {
-      name: `like:${normalizedTerm}`
+      q: `name:${normalizedTerm}*`,
+      pageSize: 4
     }
   })
     .then((response) => {
-      const normalizedCards = normalizeTcgResponse(response, normalizedTerm).slice(0, 4);
+      const normalizedCards = normalizeTcgResponse(response, normalizedTerm);
 
       console.log(
-        `[API] TCGdex response for "${normalizedTerm}" returned ${normalizedCards.length} cards.`,
+        `[API] Pokémon TCG response for "${normalizedTerm}" returned ${normalizedCards.length} cards.`,
         normalizedCards
       );
 
@@ -151,11 +152,9 @@ function normalizeTcgTerm(term) {
     .replace(/\s+/g, ' ');
 }
 
-// Wandelt die TCGdex API Antwort in ein konsistentes Karten-Array um und filtert nach dem Suchbegriff.
+// Wandelt die Pokémon TCG API Antwort in ein konsistentes Karten-Array um und filtert nach dem Suchbegriff.
 function normalizeTcgResponse(response, normalizedTerm) {
-  const cards = Array.isArray(response)
-    ? response
-    : response?.data || response?.results || [];
+  const cards = Array.isArray(response) ? response : response?.data || [];
 
   if (!Array.isArray(cards)) return [];
 
@@ -174,13 +173,9 @@ function normalizeTcgResponse(response, normalizedTerm) {
 function transformTcgCard(card) {
   if (!card || !card.name) return null;
 
-  const baseImage = card.image || null;
-  const QUALITY = 'high';
-  const EXTENSION = 'png';
+  const baseImage = card.images?.small || card.images?.large || null;
 
-  const imageUrl = baseImage
-    ? `${baseImage}/${QUALITY}.${EXTENSION}`
-    : 'img/tcg-placeholder.png'; // Fallback-Bild
+  const imageUrl = baseImage || 'img/tcg-placeholder.png'; // Fallback-Bild
 
   const setName =
     card.set?.name ||

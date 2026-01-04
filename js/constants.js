@@ -5,11 +5,10 @@ const POKE_TYPE_ENDPOINT = 'https://pokeapi.co/api/v2/type/';
 //ENDPOINT2
 const POKEMON_LIST_ENDPOINT = 'https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0';
 
-// TCGdex API-Konfiguration für das Laden der deutschsprachigen Karten.
-const TCG_API_BASE = 'https://api.tcgdex.net/v2';
-const TCG_LANGUAGE = 'en';
+// Pokémon TCG API-Konfiguration (öffentlich erreichbar ohne Referer-Header).
+const TCG_API_BASE = 'https://api.pokemontcg.io/v2';
 //ENDPOINT3
-const TCG_ENDPOINT = `${TCG_API_BASE}/${TCG_LANGUAGE}/cards`;
+const TCG_ENDPOINT = `${TCG_API_BASE}/cards`;
 
 // Lokale Storage-Konstanten für das Team-Management.
 const TEAM_STORAGE_KEY = 'pokemon-team';
