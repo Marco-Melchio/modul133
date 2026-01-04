@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body class="pokemon-theme">
-    <!-- Hero-Bereich mit Titel und Untertitel -->
+    <!-- Hero-Bereich mit Titel und Untertitel, der den Zweck der Seite erklärt. -->
     <header class="py-4 mb-4 shadow">
       <div class="container">
         <h1 class="display-5 fw-bold text-center text-uppercase">
@@ -33,7 +33,7 @@
     </header>
 
     <main class="container pb-5">
-      <!-- Globale Statusmeldungen werden hier ausgespielt -->
+      <!-- Globale Statusmeldungen werden hier ausgespielt, z. B. Fehlerhinweise oder Erfolgsfeedback. -->
       <section class="row g-4 align-items-start">
         <div class="col-12">
           <div
@@ -46,6 +46,7 @@
         <div class="col-12 col-lg-8">
           <div class="card border-0 h-100">
             <div class="card-body">
+              <!-- Suchformular: nimmt einen Namen entgegen und löst die PokeAPI-Suche aus. -->
               <h2 class="h4 mb-3">Pokémon suchen</h2>
               <form id="search-form" class="search-panel">
                 <div class="search-panel__grid">
@@ -84,6 +85,7 @@
         <div class="col-12 col-lg-4">
           <div class="card border-0 h-100">
             <div class="card-body">
+              <!-- Schnellzugriff für Nutzer, die einfach nur stöbern möchten. -->
               <h2 class="h4 mb-3">Zufallspokemon</h2>
               <div class="user-panel">
                 <div class="user-panel__header">
@@ -103,7 +105,7 @@
         </div>
       </section>
 
-      <!-- Detaildarstellung des aktuell geladenen Pokémon inkl. Add-to-Team -->
+      <!-- Detaildarstellung des aktuell geladenen Pokémon inkl. Add-to-Team. -->
       <section class="row g-4 mt-1">
         <div class="col-12">
           <div class="card border-0 ">
@@ -124,7 +126,7 @@
         </div>
       </section>
 
-      <!-- Typenbeziehungen und TCG-Karten-Galerie -->
+      <!-- Typenbeziehungen und TCG-Karten-Galerie. Links Stärken, rechts Schwächen, darunter Karten-Motive. -->
       <section class="row g-4 mt-1">
         <div class="col-12 col-lg-6">
           <div class="card border-0 h-100">
@@ -149,6 +151,7 @@
         <div class="col-12">
           <div class="card border-0 h-100">
             <div class="card-body">
+              <!-- Zeigt bis zu vier gefundene Trading Cards als kleines Showcase. -->
               <h2 class="h4 mb-3">TCG Karten</h2>
               <div id="tcg-cards" class="row g-4 tcg-gallery"></div>
             </div>
@@ -156,7 +159,7 @@
         </div>
       </section>
 
-      <!-- Showcase der zusammengestellten Teams mit max. 6 Slots -->
+      <!-- Showcase der zusammengestellten Teams mit max. 6 Slots inklusive freier Plätze. -->
       <section class="row g-4 mt-1">
         <div class="col-12">
           <div class="card border-0">

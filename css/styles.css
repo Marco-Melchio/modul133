@@ -1,4 +1,10 @@
 
+/*
+ * Stylesheet für den Pokémon Team Builder.
+ * Jede Sektion ist deutsch kommentiert, damit klar wird, welches Styling welchen UI-Bereich betrifft.
+ * Grundidee: ein leichtes Glassmorphism-Theme mit kräftigen Pokémon-Farben und weichen Schatten.
+ */
+
 /* Farbvariablen und generelle Token für Schatten/Abstände */
 :root {
   --pokemon-red: #ff355e;
