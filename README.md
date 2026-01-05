@@ -55,4 +55,18 @@ modul133/
 - jQuery wird für AJAX und DOM-Manipulation genutzt, Bootstrap 5 liefert Basisstyles.
 - Typen- und Karten-APIs laufen parallel zur Pokémon-Suche, Fehler werden im UI mit Hinweisen abgefangen.
 
+## Kompetenz-Referenzen (C1–C18)
+- **C1/C2:** Durchgehende deutschsprachige Kommentare und konsistente Struktur in `js/` und `css/` (z. B. `js/functions.js`).
+- **C3:** Projekt liegt als Git-Repository vor; jede Änderung wird versioniert (`git log`, commit-Historie).
+- **C4:** HTML/CSS lassen sich mit W3C-Validatoren prüfen; keine Build-Schritte nötig.
+- **C5/C6/C7:** Funktionen sind thematisch gekapselt (`js/functions.js`), Eventhandler orchestrieren UI-Updates (`js/main.js`).
+- **C8:** Vorschläge und UI-Elemente werden nur bei Bedarf angezeigt (`handleSuggestionRender`, `hideSuggestions`).
+- **C9/C10:** Asynchrone Aufrufe an mehrere APIs (PokeAPI für Pokémon & Typen, Pokémon TCG API) in `fetchPokemon`, `fetchTypeRelations`, `fetchTcgCards`.
+- **C11:** Fehlerfälle führen zu klaren Status- oder Fallback-Meldungen (`setStatus`, `renderTcgCardsError`).
+- **C12:** Neue Inhalte werden per Fade-In animiert (`animateSection`).
+- **C13/C14:** Bootstrap und jQuery sind global eingebunden (`index.html`).
+- **C15:** Media-Queries stellen ein responsives Layout sicher (`css/styles.css`).
+- **C16:** JSON-Daten werden in lesbare HTML-Elemente umgewandelt (`renderPokemonDetails`, `renderTypeRelations`, TCG-Galerie).
+- **C17/C18:** Team wird im Local Storage gespeichert und beim Laden wiederhergestellt (`getTeam`, `saveTeam`, `loadTeamFromStorage`).
+
 Viel Spaß beim Zusammenstellen deines Teams!
