@@ -191,6 +191,7 @@ header .lead {
   height: auto;
 }
 
+/* [C15] Responsives Layout: ab 768px wird das Grid zweispaltig dargestellt. */
 @media (min-width: 768px) {
   .search-panel__grid {
     flex-direction: row;

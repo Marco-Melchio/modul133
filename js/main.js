@@ -1,3 +1,10 @@
+/**
+ * Kompetenz-Map (Frontend-Fluss)
+ * [C5/C6] Eventhandling ist gebündelt im Ready-Block; jede Aktion ruft klar getrennte Funktionen auf.
+ * [C7/C8/C11] UI-Änderungen passieren ausschliesslich im DOM, inklusive Zustandsmeldungen bei Fehlern.
+ * [C17/C18] Teamzustand wird beim Laden aus dem Local Storage wiederhergestellt und fortlaufend gepflegt.
+ */
+
 // Aktuell geladenes Pokémon, das zur Detailanzeige und zum Team hinzufügen genutzt wird.
 // Wird immer gesetzt, nachdem searchPokemon erfolgreich war.
 window.currentPokemon = null;
@@ -11,7 +18,7 @@ window.SUGGESTION_LIMIT = 6;
 
 $(document).ready(function () {
   console.log('[App] Initializing Pokémon Team Builder.');
-  loadTeamFromStorage();
+  loadTeamFromStorage(); // [C17/C18] Zustand aus WebStorage initial wiederherstellen
   preloadPokemonNames();
 
   const $pokemonInput = $('#pokemon-input');

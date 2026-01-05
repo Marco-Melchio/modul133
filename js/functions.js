@@ -1,7 +1,17 @@
+/**
+ * Kompetenz-Map (Daten + UI-Funktionen)
+ * [C5] Funktionen sind nach Verantwortlichkeiten gekapselt (API, Team, UI).
+ * [C9/C10] API-Zugriffe laufen asynchron über AJAX und nutzen mehrere Endpunkte.
+ * [C11] Fehlerpfade liefern Statusmeldungen oder Fallback-HTML.
+ * [C12] Animierte UI-Updates über animateSection.
+ * [C16] API-Rohdaten werden für die Ausgabe aufbereitet.
+ * [C17/C18] Teamzustand wird im Local Storage gespeichert und wiederhergestellt.
+ */
+
 /** POKEMON API *****************************************************/
 
-// Lädt die detaillierten Daten eines Pokémon und transformiert sie direkt in ein
-// vereinfachtes Objekt, das von der UI genutzt werden kann.
+// [C9/C10/C16] Lädt die detaillierten Daten eines Pokémon asynchron und transformiert sie direkt
+// in ein vereinfachtes Objekt, das von der UI genutzt werden kann.
 // Rückgabe: Promise mit einem schlanken Objekt, das nur die benötigten Felder enthält.
 function fetchPokemon(pokemonName) {
   return $.ajax({
@@ -39,7 +49,7 @@ function simplifyPokemon(data) {
 
 /** TYPE RELATIONS *************************************************/
 
-// Holt zu den Pokémon-Typen alle Stärken/Schwächen aus der API.
+// [C9/C10] Holt zu den Pokémon-Typen alle Stärken/Schwächen asynchron aus der API.
 // Mehrere Typen werden parallel angefragt und danach zusammengeführt.
 function fetchTypeRelations(types) {
   const uniqueTypes = [...new Set(types)];
@@ -112,8 +122,9 @@ function addToSet(set, relations = []) {
 
 /** POKÉMON TCG API *************************************************/
 
-// Fragt die Pokémon TCG API ab, um Karten zu einem Suchbegriff zu laden; leere Eingaben liefern ein leeres Array.
-// Die API liefert deutlich mehr Ergebnisse, deshalb begrenzen wir per pageSize auf vier Karten.
+// [C9/C10/C16] Fragt die Pokémon TCG API asynchron ab und wandelt die Antwort in ein nutzbares Karten-Array um;
+// leere Eingaben liefern ein leeres Array. Die API liefert deutlich mehr Ergebnisse, deshalb begrenzen wir per
+// pageSize auf vier Karten.
 function fetchTcgCards(term) {
   const normalizedTerm = normalizeTcgTerm(term);
 
@@ -201,7 +212,7 @@ function transformTcgCard(card) {
 
 /** TEAM MANAGEMENT *************************************************/
 
-// Liest das gespeicherte Team aus dem Local Storage und gibt ein Array zurück.
+// [C17/C18] Liest das gespeicherte Team aus dem Local Storage und gibt ein Array zurück.
 // Fehlende Einträge werden als leeres Array zurückgegeben, damit die Aufrufer nicht crashen.
 function getTeam() {
   const stored = localStorage.getItem(TEAM_STORAGE_KEY);
@@ -210,20 +221,20 @@ function getTeam() {
   return team;
 }
 
-// Persistiert das Team im Local Storage.
+// [C17] Persistiert das Team im Local Storage.
 function saveTeam(team) {
   localStorage.setItem(TEAM_STORAGE_KEY, JSON.stringify(team));
   console.log(`[Team] Saved team with ${team.length} Pokémon.`);
 }
 
-// Stellt das Team beim Laden der Seite wieder her.
+// [C18] Stellt das Team beim Laden der Seite wieder her.
 // Wird bei App-Start aufgerufen, damit vorhandene Einträge sofort sichtbar sind.
 function loadTeamFromStorage() {
   console.log('[Team] Restoring team from local storage.');
   renderTeam(getTeam());
 }
 
-// Fügt ein Pokémon hinzu, sofern Kapazität frei ist und es nicht doppelt existiert.
+// [C7/C17] Fügt ein Pokémon hinzu, sofern Kapazität frei ist und es nicht doppelt existiert.
 // Rückgabe: true bei Erfolg, false bei Fehlversuch (voll oder Duplikat).
 function addPokemonToTeam(pokemon) {
   const team = getTeam();
@@ -247,7 +258,7 @@ function addPokemonToTeam(pokemon) {
   return true;
 }
 
-// Entfernt einen Eintrag anhand des Indexes aus dem Team.
+// [C7] Entfernt einen Eintrag anhand des Indexes aus dem Team.
 function removePokemonFromTeam(index) {
   const team = getTeam();
   const updatedTeam = team.filter((_, i) => i !== index);
@@ -257,7 +268,7 @@ function removePokemonFromTeam(index) {
   console.log(`[Team] Removed Pokémon at index ${index}.`);
 }
 
-// Rendert aktuell nur die Showcase-Ansicht, kann später erweitert werden.
+// [C5/C7/C8] Rendert aktuell nur die Showcase-Ansicht; UI-Updates passieren ausschliesslich im DOM.
 // Idee: hier könnte man weitere Darstellungen (z. B. Liste oder Tabelle) ergänzen.
 function renderTeam(team) {
   renderTeamShowcase(team);
@@ -331,7 +342,7 @@ function renderTeamShowcase(team) {
 
 /** UI HELPERS *****************************************************/
 
-// Zeigt eine Statusmeldung oberhalb der Suche an.
+// [C11] Zeigt eine Statusmeldung oberhalb der Suche an.
 // Typen (success, warning, info, danger) steuern das Farbschema per CSS.
 function setStatus(message, type) {
   $('#status-message')
@@ -346,7 +357,7 @@ function disableTeamButton() {
   $('#add-to-team').prop('disabled', true);
 }
 
-// Baut das Detailpanel für das aktuell geladene Pokémon.
+// [C16] Baut das Detailpanel für das aktuell geladene Pokémon aus den JSON-Daten.
 // Enthält Artwork, Typen, Fähigkeiten und eine kleine Stat-Progressbar.
 function renderPokemonDetails(pokemon) {
   const details = `
@@ -395,8 +406,7 @@ function showTypeRelationsLoading() {
   $('#weakness-relations').html(loading);
 }
 
-// Stellt Stärken und Schwächen nebeneinander dar.
-// Im Fehlerfall wird eine platzhalterhafte Meldung angezeigt.
+// [C11/C16] Stellt Stärken und Schwächen nebeneinander dar; zeigt Fallback-Meldungen bei fehlenden Daten.
 function renderTypeRelations(relations) {
   $('#strength-relations').html(
     renderRelationContent(relations.strengths, 'Keine offensichtlichen Stärken.')
@@ -463,12 +473,12 @@ function clearTcgCards() {
   $('#tcg-cards').html('<p>Keine Karten verfügbar.</p>');
 }
 
-// Fehlerausgabe für die TCG API.
+// [C11] Fehlerausgabe für die TCG API.
 function renderTcgCardsError() {
   $('#tcg-cards').html('<p>TCG API nicht erreichbar.</p>');
 }
 
-// Zeigt eine Warnung an, falls Typbeziehungen nicht geladen werden konnten.
+// [C11] Zeigt eine Warnung an, falls Typbeziehungen nicht geladen werden konnten.
 function renderTypeRelationsError() {
   const errorMessage =
     '<div class="type-relations-placeholder text-warning">Beziehungen konnten nicht geladen werden.</div>';
@@ -477,14 +487,14 @@ function renderTypeRelationsError() {
   $('#weakness-relations').html(errorMessage);
 }
 
-// Kleine Fade-In-Animation, um neue Inhalte hervorzuheben.
+// [C12] Kleine Fade-In-Animation, um neue Inhalte hervorzuheben.
 function animateSection(selector) {
   $(selector).hide().fadeIn(400);
 }
 
 /** APP LOGIC *****************************************************/
 
-// Zentraler Suchablauf: lädt Pokémon, Typ-Beziehungen und TCG-Karten und aktualisiert die UI.
+// [C5/C6/C7/C9/C10/C11] Zentraler Suchablauf mit Eventhandler-Kette, asynchronen API-Calls und UI-Updates.
 // Der Ablauf ist bewusst in then-Ketten aufgeteilt, damit Fehler separat behandelt werden können.
 function searchPokemon(pokemonName) {
   console.log(`[Search] Starting lookup for ${pokemonName}.`);
@@ -549,8 +559,7 @@ function preloadPokemonNames() {
     });
 }
 
-// Zeigt die Vorschläge nur an, wenn der eingegebene Begriff lang genug ist.
-// Zusätzlich wird geprüft, ob überhaupt Namensdaten vorhanden sind.
+// [C8] Zeigt die Vorschläge nur an, wenn der eingegebene Begriff lang genug ist und Daten vorhanden sind.
 function handleSuggestionRender(term) {
   if (!term || term.length < window.SUGGESTION_THRESHOLD || !window.pokemonNames.length) {
     hideSuggestions();
@@ -561,8 +570,7 @@ function handleSuggestionRender(term) {
   renderSuggestions(term);
 }
 
-// Baut die HTML-Liste für die passenden Vorschläge.
-// Es werden maximal SUGGESTION_LIMIT Einträge angezeigt, um die Liste kurz zu halten.
+// [C8] Baut die HTML-Liste für die passenden Vorschläge und limitiert die sichtbaren Elemente.
 function renderSuggestions(term) {
   const matches = window.pokemonNames
     .filter((name) => name.includes(term))
