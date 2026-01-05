@@ -1,188 +1,169 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
-    <!-- Basis-Setup des Dokuments und Laden der Schriften/CSS-Abhängigkeiten -->
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pokémon Team Builder</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-    />
-    <link rel="icon" type="image/png" href="img/Poke.png">
-    <link rel="stylesheet" href="css/styles.css" />
-  </head>
-  <body class="pokemon-theme">
-    <!-- Hero-Bereich mit Titel und Untertitel, der den Zweck der Seite erklärt. -->
-    <header class="py-4 mb-4 shadow">
-      <div class="container">
-        <h1 class="display-5 fw-bold text-center text-uppercase">
-          Pokémon Team Builder
-        </h1>
-        <p class="lead text-center mb-0">
-          Suche nach Pokémon, entdecke Karten und stelle dein Team zusammen.
-        </p>
-      </div>
-    </header>
 
-    <main class="container pb-5">
-      <!-- Globale Statusmeldungen werden hier ausgespielt, z. B. Fehlerhinweise oder Erfolgsfeedback. -->
-      <section class="row g-4 align-items-start">
-        <div class="col-12">
-          <div
-            id="status-message"
-            class="status-message"
-            role="alert"
-            aria-live="polite"
-          ></div>
+<head>
+  <!-- Basis-Setup des Dokuments und Laden der Schriften/CSS-Abhängigkeiten -->
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon Team Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="icon" type="image/png" href="img/Poke.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body class="pokemon-theme">
+  <!-- Hero-Bereich mit Titel und Untertitel, der den Zweck der Seite erklärt. -->
+  <header class="py-4 mb-4 shadow">
+    <div class="container">
+      <h1 class="display-5 fw-bold text-center text-uppercase">
+        Pokémon Team Builder
+      </h1>
+      <p class="lead text-center mb-0">
+        Suche nach Pokémon, entdecke Karten und stelle dein Team zusammen.
+      </p>
+    </div>
+  </header>
+
+  <main class="container pb-5">
+    <!-- Globale Statusmeldungen werden hier ausgespielt, z. B. Fehlerhinweise oder Erfolgsfeedback. -->
+    <section class="row g-4 align-items-start">
+      <div class="col-12">
+        <div 
+          id="status-message" 
+          class="status-message" 
+          role="alert" 
+          aria-live="polite">
         </div>
-        <div class="col-12 col-lg-8">
-          <div class="card border-0 h-100">
-            <div class="card-body">
-              <!-- Suchformular: nimmt einen Namen entgegen und löst die PokeAPI-Suche aus. -->
-              <h2 class="h4 mb-3">Pokémon suchen</h2>
-              <form id="search-form" class="search-panel">
-                <div class="search-panel__grid">
-                  <div class="search-panel__input-col">
-                    <label class="form-label visually-hidden" for="pokemon-input"
-                      >Pokémon Name</label
-                    >
-                    <input
-                      id="pokemon-input"
-                      class="form-control form-control-lg"
-                      type="text"
-                      placeholder="z.B. pikachu"
-                      autocomplete="off"
-                      required
-                    />
-                    <div
-                      id="pokemon-suggestions"
-                      class="suggestions list-group "
-                      role="listbox"
-                      aria-label="Vorschläge für Pokémon Namen"
-                    ></div>
-                  </div>
-                  <div class="search-panel__button-col">
-                    <button
-                      type="submit"
-                      class="btn btn-warning action-button btn-animated w-100"
-                    >
-                      Laden
-                    </button>
+      </div>
+      <div class="col-12 col-lg-8">
+        <div class="card border-0 h-100">
+          <div class="card-body">
+            <!-- Suchformular: nimmt einen Namen entgegen und löst die PokeAPI-Suche aus. -->
+            <h2 class="h4 mb-3">Pokémon suchen</h2>
+            <form id="search-form" class="search-panel">
+              <div class="search-panel__grid">
+                <div class="search-panel__input-col">
+                  <label class="form-label visually-hidden" for="pokemon-input">Pokémon Name</label>
+                  <input 
+                    id="pokemon-input" 
+                    class="form-control form-control-lg" 
+                    type="text" 
+                    placeholder="z.B. pikachu" 
+                    autocomplete="off" 
+                    required>
+                  <div 
+                    id="pokemon-suggestions" 
+                    class="suggestions list-group " 
+                    role="listbox"
+                    aria-label="Vorschläge für Pokémon Namen">
                   </div>
                 </div>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-lg-4">
-          <div class="card border-0 h-100">
-            <div class="card-body">
-              <!-- Schnellzugriff für Nutzer, die einfach nur stöbern möchten. -->
-              <h2 class="h4 mb-3">Zufallspokemon</h2>
-              <div class="user-panel">
-                <div class="user-panel__header">
-                </div>
-                <div class="user-panel__actions">
-                  <button
-                    id="random-search"
-                    type="button"
-                    class="btn user-panel__button user-panel__button--primary btn-animated"
-                  >
-                    Suchen
+                <div class="search-panel__button-col">
+                  <button type="submit" class="btn btn-warning action-button btn-animated w-100">
+                    Laden
                   </button>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
-      </section>
-
-      <!-- Detaildarstellung des aktuell geladenen Pokémon inkl. Add-to-Team. -->
-      <section class="row g-4 mt-1">
-        <div class="col-12">
-          <div class="card border-0 ">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="h4 mb-0">Pokémon Details</h2>
-                <button
-                  id="add-to-team"
-                  class="btn btn-success action-button btn-animated"
-                  disabled
-                >
-                  Zum Team hinzufügen
+      </div>
+      <div class="col-12 col-lg-4">
+        <div class="card border-0 h-100">
+          <div class="card-body">
+            <!-- Schnellzugriff für Nutzer, die einfach nur stöbern möchten. -->
+            <h2 class="h4 mb-3">Zufallspokemon</h2>
+            <div class="user-panel">
+              <div class="user-panel__header">
+              </div>
+              <div class="user-panel__actions">
+                <button id="random-search" type="button"
+                  class="btn user-panel__button user-panel__button--primary btn-animated">
+                  Suchen
                 </button>
               </div>
-              <div id="pokemon-details" class="row gy-4"></div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Typenbeziehungen und TCG-Karten-Galerie. Links Stärken, rechts Schwächen, darunter Karten-Motive. -->
-      <section class="row g-4 mt-1">
-        <div class="col-12 col-lg-6">
-          <div class="card border-0 h-100">
-            <div class="card-body">
-              <h2 class="h4 mb-3">Stärken</h2>
-              <div id="strength-relations" class="type-relations-placeholder text-muted">
-                Noch keine Daten geladen.
-              </div>
+    <!-- Detaildarstellung des aktuell geladenen Pokémon inkl. Add-to-Team. -->
+    <section class="row g-4 mt-1">
+      <div class="col-12">
+        <div class="card border-0 ">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h2 class="h4 mb-0">Pokémon Details</h2>
+              <button id="add-to-team" class="btn btn-success action-button btn-animated" disabled>
+                Zum Team hinzufügen
+              </button>
             </div>
+            <div id="pokemon-details" class="row gy-4"></div>
           </div>
         </div>
-        <div class="col-12 col-lg-6">
-          <div class="card border-0  h-100">
-            <div class="card-body">
-              <h2 class="h4 mb-3">Schwächen</h2>
-              <div id="weakness-relations" class="type-relations-placeholder text-muted">
-                Noch keine Daten geladen.
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-12">
-          <div class="card border-0 h-100">
-            <div class="card-body">
-              <!-- Zeigt bis zu vier gefundene Trading Cards als kleines Showcase. -->
-              <h2 class="h4 mb-3">TCG Karten</h2>
-              <div id="tcg-cards" class="row g-4 tcg-gallery"></div>
-            </div>
-          </div>
-        </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Showcase der zusammengestellten Teams mit max. 6 Slots inklusive freier Plätze. -->
-      <section class="row g-4 mt-1">
-        <div class="col-12">
-          <div class="card border-0">
-            <div class="card-body">
-              <h2 class="h4 mb-3 text-center text-uppercase">Team Showcase</h2>
-              <p class="text-center text-muted small mb-4">
-                Dein komplettes Team in gross, maximal sechs Pokémon.
-              </p>
-              <div id="team-showcase" class="row g-3 justify-content-center"></div>
+    <!-- Typenbeziehungen und TCG-Karten-Galerie. Links Stärken, rechts Schwächen, darunter Karten-Motive. -->
+    <section class="row g-4 mt-1">
+      <div class="col-12 col-lg-6">
+        <div class="card border-0 h-100">
+          <div class="card-body">
+            <h2 class="h4 mb-3">Stärken</h2>
+            <div id="strength-relations" class="type-relations-placeholder text-muted">
+              Noch keine Daten geladen.
             </div>
           </div>
         </div>
-      </section>
-    </main>
+      </div>
+      <div class="col-12 col-lg-6">
+        <div class="card border-0  h-100">
+          <div class="card-body">
+            <h2 class="h4 mb-3">Schwächen</h2>
+            <div id="weakness-relations" class="type-relations-placeholder text-muted">
+              Noch keine Daten geladen.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="card border-0 h-100">
+          <div class="card-body">
+            <!-- Zeigt bis zu vier gefundene Trading Cards als kleines Showcase. -->
+            <h2 class="h4 mb-3">TCG Karten</h2>
+            <div id="tcg-cards" class="row g-4 tcg-gallery"></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <!-- Skriptreihenfolge: Konstanten -> API -> Team-Logik -> UI-Renderer -> App-Init -->
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-      referrerpolicy="no-referrer"
-    ></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/constants.js"></script>
-    <script src="js/functions.js"></script>
-    <script src="js/main.js"></script>
-  </body>
+    <!-- Showcase der zusammengestellten Teams mit max. 6 Slots inklusive freier Plätze. -->
+    <section class="row g-4 mt-1">
+      <div class="col-12">
+        <div class="card border-0">
+          <div class="card-body">
+            <h2 class="h4 mb-3 text-center text-uppercase">Team Showcase</h2>
+            <p class="text-center text-muted small mb-4">
+              Dein komplettes Team in gross, maximal sechs Pokémon.
+            </p>
+            <div id="team-showcase" class="row g-3 justify-content-center"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Skriptreihenfolge: Konstanten -> API -> Team-Logik -> UI-Renderer -> App-Init -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/constants.js"></script>
+  <script src="js/functions.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
 </html>
